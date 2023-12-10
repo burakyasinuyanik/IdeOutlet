@@ -17,8 +17,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Ide.Business\Ide.Business.csproj" />
     <ProjectReference Include="..\Ide.Data\Ide.Data.csproj" />
     <ProjectReference Include="..\Ide.Models\Ide.Models.csproj" />
+    <ProjectReference Include="..\Ide.Utility\Ide.Utility.csproj" />
+    <ProjectReference Include="..\IdeWeb\Ide.Web.csproj" />
   </ItemGroup>
 
 </Project>
