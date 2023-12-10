@@ -1,4 +1,6 @@
 using Ide.Data;
+using Ide.Repository.Shared.Abstract;
+using Ide.Repository.Shared.Concrete;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,7 @@ builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
     );
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("connstr")));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Add services to the container.Views();
 

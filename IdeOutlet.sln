@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ide.Web", "IdeWeb\Ide.Web.csproj", "{569A61B0-D095-440F-8424-6A64082B598C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ide.Web", "IdeWeb\Ide.Web.csproj", "{569A61B0-D095-440F-8424-6A64082B598C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ide.Business", "Ide.Business\Ide.Business.csproj", "{3595A63A-C0ED-46FB-8CB8-761505BD69E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ide.Business", "Ide.Business\Ide.Business.csproj", "{3595A63A-C0ED-46FB-8CB8-761505BD69E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ide.Repository", "Ide.Repository\Ide.Repository.csproj", "{C9042B1E-B059-4BFF-BD7E-04D01D86C5D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ide.Utility", "Ide.Utility\Ide.Utility.csproj", "{9F924680-D53B-4061-B61C-54BB01FBE6E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ide.Utility", "Ide.Utility\Ide.Utility.csproj", "{9F924680-D53B-4061-B61C-54BB01FBE6E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ide.Data", "Ide.Data\Ide.Data.csproj", "{8BB6E666-A5A1-4C0A-BAF1-7509CECC4B0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ide.Data", "Ide.Data\Ide.Data.csproj", "{8BB6E666-A5A1-4C0A-BAF1-7509CECC4B0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ide.Models", "Ide.Models\Ide.Models.csproj", "{661F4110-C3E7-4478-A12E-4F4F936A9DFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ide.Models", "Ide.Models\Ide.Models.csproj", "{661F4110-C3E7-4478-A12E-4F4F936A9DFC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ide.Repository", "Ide.Repo\Ide.Repository.csproj", "{43A5ECD1-D41F-433C-BAE1-6CC011F4A162}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,6 @@ Global
 		{3595A63A-C0ED-46FB-8CB8-761505BD69E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3595A63A-C0ED-46FB-8CB8-761505BD69E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3595A63A-C0ED-46FB-8CB8-761505BD69E7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C9042B1E-B059-4BFF-BD7E-04D01D86C5D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C9042B1E-B059-4BFF-BD7E-04D01D86C5D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C9042B1E-B059-4BFF-BD7E-04D01D86C5D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C9042B1E-B059-4BFF-BD7E-04D01D86C5D8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9F924680-D53B-4061-B61C-54BB01FBE6E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9F924680-D53B-4061-B61C-54BB01FBE6E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F924680-D53B-4061-B61C-54BB01FBE6E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +41,10 @@ Global
 		{661F4110-C3E7-4478-A12E-4F4F936A9DFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{661F4110-C3E7-4478-A12E-4F4F936A9DFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{661F4110-C3E7-4478-A12E-4F4F936A9DFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43A5ECD1-D41F-433C-BAE1-6CC011F4A162}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43A5ECD1-D41F-433C-BAE1-6CC011F4A162}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43A5ECD1-D41F-433C-BAE1-6CC011F4A162}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43A5ECD1-D41F-433C-BAE1-6CC011F4A162}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
