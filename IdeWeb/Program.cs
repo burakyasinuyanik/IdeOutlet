@@ -1,3 +1,4 @@
+using Ide.Business.Configurations;
 using Ide.Data;
 using Ide.Repository.Shared.Abstract;
 using Ide.Repository.Shared.Concrete;
@@ -8,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
     );
-
+builder.Services.AddBusinessDI();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("connstr")));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
