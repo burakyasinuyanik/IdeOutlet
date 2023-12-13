@@ -23,21 +23,8 @@
 
                     <div class="container">
 
-                        <div class="mb-3 row">
-                            <label for="inputName" class="col-4 col-form-label">Fotoğraf</label>
-                            <img src="~/assets/images/users/logo-sm.png" id="imgProfilePicture" alt="" class="avatar-lg rounded-circle img-thumbnail">
-                            <input type="file" name="uploadfile" id="fileProfilePicture" style="display:none;" accept=".jpeg,.jpg,.png" />
-                            <div class="col-8">
-                                <label for="fileProfilePicture"><a class="btn btn-success btn-sm">Seç</a></label>
-                            </div>
-                        </div>
 
-                        <div class="mb-3 row">
-                            <label for="inputName" class="col-4 col-form-label">Ad Soyad</label>
-                            <div class="col-8">
-                                <input type="text" class="form-control needs-validation" required id="txtName" placeholder="Lütfen ad soyad giriniz">
-                            </div>
-                        </div>
+                        
 
                         <div class="mb-3 row">
                             <label for="inputName" class="col-4 col-form-label">Email</label>
@@ -46,12 +33,7 @@
                             </div>
                         </div>
 
-                        <div class="mb-3 row">
-                            <label for="inputName" class="col-4 col-form-label">TCKN</label>
-                            <div class="col-8">
-                                <input data-parsley-minlength="11" data-parsley-type="number" data-inputmask="'mask': '99999999999'" maxlength="11" type="text" required class="form-control input-mask" data- id="txtTckn" placeholder="Tckimlik no giriniz">
-                            </div>
-                        </div>
+                      
 
                         <div class="mb-3 row">
                             <label for="inputName" class="col-4 col-form-label">GSM</label>
@@ -133,18 +115,18 @@
         }
         function updateUser(userId) {
             $("#modalAddUpdate").modal("show");
-            fillUserTypes();
+       
 
             $.ajax({
                 type: 'POST',
-                url: '/User/GetById',
+                url: '/User/UserGetById',
                 data: { userId: userId },
                 success: function (res) {
                     $("#txtName").val(res.name);
                     $("#txtEmail").val(res.email);
                     $("#txtGsm").val(res.gsm);
                    
-                    $("#ddlUserType").val(res.userTypeId);
+              
                    
                 }
             });
@@ -164,9 +146,9 @@
                     formData.append("name", $("#txtName").val());
                     formData.append("email", $("#txtEmail").val());
                     formData.append("gsm", $("#txtGsm").val());
-                    formData.append("tckn", $("#txtTckn").val());
+                  
                     formData.append("userTypeId", $("#ddlUserType").val());
-                    formData.append("profilePicture", $("#fileProfilePicture")[0].files[0]);
+                 
 
 
 
@@ -188,6 +170,17 @@
                 }
             });
         }
+        function fillUserTypes(userTypeId) {
 
+            $.ajax({
+                url: '/UserType/GetAll',
+                success: function (res) {
+                    $("#ddlUserType").empty();
+                    for (var item of res) {
+                        $("#ddlUserType").append(new Option(item.name, item.id, false, item.id == userTypeId));
+                    }
+                }
+            })
+        }
     </script>
 }

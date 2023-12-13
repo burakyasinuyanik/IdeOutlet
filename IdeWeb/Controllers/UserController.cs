@@ -104,9 +104,9 @@ namespace Ide.Web.Controllers
             return Json(new { data = userService.UserGetAll() });
         }
 
-        public IActionResult UserGetById(int id)
+        public IActionResult UserGetById(int userId)
         {
-            return Json(userService.GetById(id));
+            return Json(userService.GetById(userId));
         }
     }
 }
