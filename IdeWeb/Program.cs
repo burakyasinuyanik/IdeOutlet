@@ -2,6 +2,7 @@ using Ide.Business.Configurations;
 using Ide.Data;
 using Ide.Repository.Shared.Abstract;
 using Ide.Repository.Shared.Concrete;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,12 @@ builder.Services.AddBusinessDI();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("connstr")));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+{
+    options.AccessDeniedPath = "/User/AccessDenied";
+    options.LoginPath = "/User/Login";
+
+});
 // Add services to the container.Views();
 
 var app = builder.Build();

@@ -11,7 +11,7 @@ namespace Ide.Models.DTOs
         public string Email { get; set; }
         public string Password { get; set; }
         public string Gsm { get; set; }
-        public int UserTypeId { get; set; } = 2;
+        public int UserTypeId { get; set; } 
         public bool IsPersistent { get; set; } = false;
     }
 }

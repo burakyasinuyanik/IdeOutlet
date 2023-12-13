@@ -1,0 +1,193 @@
+﻿
+
+<div class="card border border-primary col-12">
+    <div class="card-header bg-primary border-primary">
+        <h5 class="my-0 text-white"><i class="uil uil-user me-3"></i>Kullanıcı Listesi</h5>
+    </div><!-- end card-header -->
+    <div class="card-body" style="overflow:auto">
+       
+
+        <table id="tblUsers" class="table table-striped table-responsive table-bordered dt-responsive nowrap dataTable no-footer dtr-inline" style="border-collapse: collapse; border-spacing: 0px; width: 100%;" role="grid" aria-describedby="datatable-buttons_info"></table>
+
+    </div><!-- end card-body -->
+</div>
+<div class="modal fade" id="modalAddUpdate" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleId">Yeni Kullanıcı Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-target="#modalAddUpdate" aria-label="Close"></button>
+            </div>
+            <form id="frmAddUser" class="needs-validation">
+                <div class="modal-body">
+
+                    <div class="container">
+
+                        <div class="mb-3 row">
+                            <label for="inputName" class="col-4 col-form-label">Fotoğraf</label>
+                            <img src="~/assets/images/users/logo-sm.png" id="imgProfilePicture" alt="" class="avatar-lg rounded-circle img-thumbnail">
+                            <input type="file" name="uploadfile" id="fileProfilePicture" style="display:none;" accept=".jpeg,.jpg,.png" />
+                            <div class="col-8">
+                                <label for="fileProfilePicture"><a class="btn btn-success btn-sm">Seç</a></label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <label for="inputName" class="col-4 col-form-label">Ad Soyad</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control needs-validation" required id="txtName" placeholder="Lütfen ad soyad giriniz">
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <label for="inputName" class="col-4 col-form-label">Email</label>
+                            <div class="col-8">
+                                <input type="email" class="form-control input-mask" parsley-type="email" required id="txtEmail" placeholder="Sisteme giriş için kullanılacaktır">
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <label for="inputName" class="col-4 col-form-label">TCKN</label>
+                            <div class="col-8">
+                                <input data-parsley-minlength="11" data-parsley-type="number" data-inputmask="'mask': '99999999999'" maxlength="11" type="text" required class="form-control input-mask" data- id="txtTckn" placeholder="Tckimlik no giriniz">
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <label for="inputName" class="col-4 col-form-label">GSM</label>
+                            <div class="col-8">
+                                <input type="text" data-parsley-minlength="13" maxlength="13" class="form-control input-mask" data-parsley-pattern="^\(5\d{2}\)-\d{7}$" data-inputmask="'mask': '(999)-9999999'" id="txtGsm" required placeholder="GSm Numarasını giriniz">
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <label for="inputName" class="col-4 col-form-label">Kullanıcı Tipi</label>
+                            <div class="col-8">
+                                <select class="form-select" required id="ddlUserType"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-target="#modalAddUpdate">Kapat</button>
+                    <button type="submit" id="btnSave" class="btn btn-primary">Ekle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var DataTable;
+
+        $(document).ready(function(){
+
+            fillDateTable();
+        })
+
+        function fillDateTable(){
+            return $("#tblUsers").DataTable({
+                ajax: "/User/UserGetAll",
+               
+                dom:"Bfrtip",
+                columns:[
+                    {data:"id",title:'Id'},
+                    { data: "email", title: 'Email' },
+                    {data:"password",title:"şifre"},
+                    { data: "userType.name", title: "Kullanıcı Tipi" },
+                    {data:"id",title:"İşlemler",render:function(data){
+                            return `  <a title="Kullanıcıyı Sil" href="#" class="px-1 text-danger" style = "opacity:60%" onclick="deleteUser(${data})" > <i class="uil uil-trash-alt font-size-24" > </i></a > <a href="#" class="px-1 text-primary" title = "Kullanıcı Düzenle" style="opacity: 60%;" onclick="updateUser(${data})" > <i class="uil uil-edit font-size-24" > </i></a>  `;
+                        
+                    }}
+
+                ],
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Turkish.json",
+                    searchPlaceholder: "Ara"
+                },
+            })
+        }
+
+        function deleteUser(userId) {
+            Swal.fire({
+                title: 'Silmek istediğinizden emin misiniz ?',
+                showCancelButton: true,
+                confirmButtonText: 'Evet',
+                cancelButtonText: 'Vazgeç',
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/User/Delete',
+                        data: { userId: userId },
+                        success: function () {
+                            toastr.success("İşlem Başarılı", "Kullanıcı Silindi !");
+                            DataTable.ajax.reload();
+                        }
+                    })
+                }
+            })
+        }
+        function updateUser(userId) {
+            $("#modalAddUpdate").modal("show");
+            fillUserTypes();
+
+            $.ajax({
+                type: 'POST',
+                url: '/User/GetById',
+                data: { userId: userId },
+                success: function (res) {
+                    $("#txtName").val(res.name);
+                    $("#txtEmail").val(res.email);
+                    $("#txtGsm").val(res.gsm);
+                   
+                    $("#ddlUserType").val(res.userTypeId);
+                   
+                }
+            });
+
+
+            $("#btnSave").off().text('Güncelle').removeClass('btn-success').addClass('btn-primary').click(function () {
+                event.preventDefault();
+
+                if ($("#frmAddUser").parsley().isValid() === false) {
+                    $('#frmAddUser').parsley().validate();
+                    $("#frmAddUser").addClass("was-validated");
+                } else {
+
+                    var formData = new FormData();
+
+                    formData.append("id", userId);
+                    formData.append("name", $("#txtName").val());
+                    formData.append("email", $("#txtEmail").val());
+                    formData.append("gsm", $("#txtGsm").val());
+                    formData.append("tckn", $("#txtTckn").val());
+                    formData.append("userTypeId", $("#ddlUserType").val());
+                    formData.append("profilePicture", $("#fileProfilePicture")[0].files[0]);
+
+
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/User/Update',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function () {
+                            $("#modalAddUpdate").modal('hide');
+                            toastr.success("İşlem Başarılı", "Kullanıcı Güncellendi !");
+                            DataTable.ajax.reload();
+                        },
+                        error: function (res) {
+                            toastr.error("İşlem başarısız", "Kullanıcı Güncellenemedi !");
+                        }
+                    });
+                }
+            });
+        }
+
+    </script>
+}
