@@ -8,5 +8,6 @@ namespace Ide.Models
 {
     public class UserType:BaseModel
     {
+        public ICollection<AppUser> appUsers { get; set; } = new List<AppUser>();
     }
 }

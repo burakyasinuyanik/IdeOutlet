@@ -4,6 +4,7 @@ using Ide.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ide.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231214185731_basketId")]
+    partial class basketId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,10 +174,15 @@ namespace Ide.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ShoppingBasketId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Stock")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ShoppingBasketId");
 
                     b.ToTable("Products");
                 });
@@ -253,25 +261,10 @@ namespace Ide.Data.Migrations
                     b.ToTable("UserTypes");
                 });
 
-            modelBuilder.Entity("ProductShoppingBasket", b =>
-                {
-                    b.Property<int>("ProductsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ShoppingBasketsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductsId", "ShoppingBasketsId");
-
-                    b.HasIndex("ShoppingBasketsId");
-
-                    b.ToTable("ProductShoppingBasket");
-                });
-
             modelBuilder.Entity("Ide.Models.AppUser", b =>
                 {
                     b.HasOne("Ide.Models.ShoppingBasket", "ShoppingBasket")
-                        .WithMany("AppUsers")
+                        .WithMany()
                         .HasForeignKey("ShoppingBasketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -302,19 +295,11 @@ namespace Ide.Data.Migrations
                     b.Navigation("AppUser");
                 });
 
-            modelBuilder.Entity("ProductShoppingBasket", b =>
+            modelBuilder.Entity("Ide.Models.Product", b =>
                 {
-                    b.HasOne("Ide.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Ide.Models.ShoppingBasket", null)
-                        .WithMany()
-                        .HasForeignKey("ShoppingBasketsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Products")
+                        .HasForeignKey("ShoppingBasketId");
                 });
 
             modelBuilder.Entity("Ide.Models.AppUser", b =>
@@ -329,7 +314,7 @@ namespace Ide.Data.Migrations
 
             modelBuilder.Entity("Ide.Models.ShoppingBasket", b =>
                 {
-                    b.Navigation("AppUsers");
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

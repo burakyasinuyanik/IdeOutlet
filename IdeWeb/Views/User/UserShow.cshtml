@@ -15,7 +15,7 @@
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalTitleId">Yeni Kullanıcı Ekle</h5>
+                <h5 class="modal-title" id="modalTitleId">Kullanıcı Güncelle</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-target="#modalAddUpdate" aria-label="Close"></button>
             </div>
             <form id="frmAddUser" class="needs-validation">
@@ -23,11 +23,22 @@
 
                     <div class="container">
 
-
-                        
+                        <div class="mb-3 row">
+                            <label for="inputName" class="col-4 col-form-label">Name</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control input-mask" parsley-type="email" required id="txtName" placeholder="Sisteme giriş için kullanılacaktır">
+                            </div>
+                        </div>
 
                         <div class="mb-3 row">
-                            <label for="inputName" class="col-4 col-form-label">Email</label>
+                            <label for="inputPass" class="col-4 col-form-label">Şifre</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control input-mask"  required id="txtPass" placeholder="Şifre">
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <label for="inputMail" class="col-4 col-form-label">Email</label>
                             <div class="col-8">
                                 <input type="email" class="form-control input-mask" parsley-type="email" required id="txtEmail" placeholder="Sisteme giriş için kullanılacaktır">
                             </div>
@@ -38,7 +49,7 @@
                         <div class="mb-3 row">
                             <label for="inputName" class="col-4 col-form-label">GSM</label>
                             <div class="col-8">
-                                <input type="text" data-parsley-minlength="13" maxlength="13" class="form-control input-mask" data-parsley-pattern="^\(5\d{2}\)-\d{7}$" data-inputmask="'mask': '(999)-9999999'" id="txtGsm" required placeholder="GSm Numarasını giriniz">
+                                <input type="text"  class="form-control input-mask"  id="txtGsm" required placeholder="GSm Numarasını giriniz">
                             </div>
                         </div>
 
@@ -71,12 +82,14 @@
         function fillDateTable(){
             return $("#tblUsers").DataTable({
                 ajax: "/User/UserGetAll",
-               
+               type:"GET",
                 dom:"Bfrtip",
                 columns:[
                     {data:"id",title:'Id'},
                     { data: "email", title: 'Email' },
+                    {data:"name", title:"İsim"},
                     {data:"password",title:"şifre"},
+                    { data: "shoppingBasketId",title:"Sepet Id" },
                     { data: "userType.name", title: "Kullanıcı Tipi" },
                     {data:"id",title:"İşlemler",render:function(data){
                             return `  <a title="Kullanıcıyı Sil" href="#" class="px-1 text-danger" style = "opacity:60%" onclick="deleteUser(${data})" > <i class="uil uil-trash-alt font-size-24" > </i></a > <a href="#" class="px-1 text-primary" title = "Kullanıcı Düzenle" style="opacity: 60%;" onclick="updateUser(${data})" > <i class="uil uil-edit font-size-24" > </i></a>  `;
@@ -90,7 +103,7 @@
                 },
             })
         }
-
+        
         function deleteUser(userId) {
             Swal.fire({
                 title: 'Silmek istediğinizden emin misiniz ?',
@@ -115,17 +128,18 @@
         }
         function updateUser(userId) {
             $("#modalAddUpdate").modal("show");
-       
+          
 
             $.ajax({
                 type: 'POST',
                 url: '/User/UserGetById',
                 data: { userId: userId },
                 success: function (res) {
+                    fillUserTypes(res.userTypeId);
                     $("#txtName").val(res.name);
                     $("#txtEmail").val(res.email);
                     $("#txtGsm").val(res.gsm);
-                   
+                    $("#txtPass").val(res.password);
               
                    
                 }
@@ -146,7 +160,7 @@
                     formData.append("name", $("#txtName").val());
                     formData.append("email", $("#txtEmail").val());
                     formData.append("gsm", $("#txtGsm").val());
-                  
+                    formData.append("password",$("#txtPass").val());
                     formData.append("userTypeId", $("#ddlUserType").val());
                  
 
@@ -154,14 +168,16 @@
 
                     $.ajax({
                         type: 'POST',
-                        url: '/User/Update',
+                        url: '/User/UserUpdate',
                         data: formData,
                         contentType: false,
                         processData: false,
                         success: function () {
                             $("#modalAddUpdate").modal('hide');
+
                             toastr.success("İşlem Başarılı", "Kullanıcı Güncellendi !");
-                            DataTable.ajax.reload();
+                            $('#tblUsers').DataTable().ajax.reload();
+
                         },
                         error: function (res) {
                             toastr.error("İşlem başarısız", "Kullanıcı Güncellenemedi !");

@@ -1,0 +1,181 @@
+﻿@using System.Security.Claims;
+<div class="container-fluid">
+
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-flex align-items-center justify-content-between">
+                <h4 class="mb-0">Sepetim</h4>
+
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="row mb-3">
+        <div class="col-xl-8" id="shoppingBasket">
+           
+                
+
+                
+
+               
+            
+            <!-- end card -->
+
+            
+
+           
+        </div>
+
+        <div class="col-xl-4">
+            <div class="mt-5 mt-lg-3">
+                <div class="card border shadow-none">
+                    <div class="card-header bg-transparent border-bottom py-3 px-4">
+                        <h5 class="font-size-16 mb-0"> <span>Sepetinizde </span>  <span  id="totalProduct"></span> adet ürün bulunmaktadır.  </h5>
+                    </div>
+                    <div class="card-body p-4">
+
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <tbody>
+                                 
+                                    
+                                    
+                                    
+                                    <tr class="bg-light">
+                                        <th>Toplam :</th>
+                                        <td class="text-end">
+                                            <span class="fw-bold" >
+                                                <span id="total"></span>  TL
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="text-sm-end mt-2 mt-sm-0">
+                                <a href="ecommerce-checkout.html" class="btn btn-success">
+                                    <i class="uil uil-shopping-cart-alt me-1"></i> Sepeti Onayla
+                                </a>
+                            </div>
+                        </div>
+                        <!-- end table-responsive -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end row -->
+    
+</div>
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function(){
+
+            fillShoppingBasket();
+        })
+
+        function deleteProduckt(id){
+         
+
+                $.ajax({
+                    url: "/ShoppingBasket/ProductDown/",
+                    type:"post",
+                    data:{
+                        mail: "@User.FindFirstValue(ClaimTypes.Name)",
+                        id:id
+                    },
+                    success:function(res){
+                        fillShoppingBasket();
+                        toastr.success(res.message);
+                    }
+                })
+            
+        }
+       
+        function fillShoppingBasket(){
+            $("#shoppingBasket").empty();
+            $.ajax({
+                url: "/ShoppingBasket/GetAll?mail=@User.FindFirstValue(ClaimTypes.Name)",
+                success: function (res) {
+                    if (res == "") {
+                        $("#total").text("0");
+                        $("#totalProduct").text("0");
+
+                        $("#shoppingBasket").append(`
+                                    <div class="card border shadow-none" >
+                                                <div class="card-body" >
+                                                        <h5 class="font-size-16 mb-1" > <a href="" class="text-reset " > </a>Sepetinizde ürün bulunmamaktadır</h5 >
+                                                        </div>
+                                                        </div>
+                                                            `)
+                    } else {
+                        let totalPrice = 0;
+                        for (var item of res) {
+                            totalPrice += item.price;
+                            $("#shoppingBasket").append(`
+                                         <div class="card border shadow-none" >
+                                        <div class="card-body" >
+                                            <div class="d-flex align-items-start border-bottom pb-3">
+                                        <div class="flex-shrink-0 me-4">
+                                            <img src="assets/images/product/img-1.png" alt="" class="avatar-lg">
+                                        </div>
+                                        <div class="flex-grow-1 align-self-center overflow-hidden">
+                                            <div>
+                                                <h5 class="text-truncate font-size-16"><a href="ecommerce-product-detail.html" class="text-reset ">${item.name}</a></h5>
+                                                <p>Barkod : <span class="fw-medium">${item.barcode}</span></p>
+                                                <p>Ürün No : <span class="fw-medium">${item.productNo}</span></p>
+                                                <p class="mb-1">Toplam Stok : <span class="fw-medium">${item.stock}</span></p>
+                                                        <p class="mb-1">Ürün açıklaması : <span class="fw-medium">${item.description}</span></p>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="ms-2">
+                                            <ul class="list-inline mb-0 font-size-16">
+                                                <li class="list-inline-item">
+                                                            <a id="productDown" href="#" onclick="deleteProduckt(${item.id})" class="text-muted px-2">
+                                                        <i class="uil uil-trash-alt"></i>
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="mt-3">
+                                                    <p class="text-muted mb-2">Fiyat</p>
+                                                    <h5 class="font-size-16">${item.price} TL</h5>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="mt-3">
+                                                    <p class="text-muted mb-2">Adet</p>
+                                                    <h5 class="font-size-16">1 Adet</h5>
+
+                                                    <div style="width: 110px;" class="product-cart-touchspin">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                             </div>
+                                                     </div>
+                                `)
+                            $("#total").text(totalPrice);
+                            $("#totalProduct").text(res.length);
+
+                        }
+                    }
+                }
+            })
+        }
+       
+    </script>
+}

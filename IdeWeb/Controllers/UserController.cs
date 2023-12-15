@@ -99,6 +99,7 @@ namespace Ide.Web.Controllers
             return View();
         }
 
+        [HttpGet]
         public IActionResult UserGetAll()
         {
             return Json(new { data = userService.UserGetAll() });
@@ -107,6 +108,12 @@ namespace Ide.Web.Controllers
         public IActionResult UserGetById(int userId)
         {
             return Json(userService.GetById(userId));
+        }
+     
+        public IActionResult UserUpdate(AppUser user)
+        {
+            userService.UserUpdate(user);
+            return Ok();
         }
     }
 }

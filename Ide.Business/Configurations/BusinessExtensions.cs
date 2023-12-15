@@ -15,6 +15,8 @@ namespace Ide.Business.Configurations
         public static void AddBusinessDI(this IServiceCollection services )
         {
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserTypeService,UserTypeService>();
+            services.AddScoped<IShopingBasketService, ShoppingBasketService>();
         }
     }
 }

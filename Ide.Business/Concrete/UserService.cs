@@ -28,6 +28,7 @@ namespace Ide.Business.Concrete
         public AppUser UserAdd(LoginAndAddUserDto loginAndAddUserDto)
         {
             AppUser appUser = new AppUser();
+            appUser.Name = loginAndAddUserDto.Name;
             appUser.Email = loginAndAddUserDto.Email;
             appUser.Password = loginAndAddUserDto.Password;
             appUser.Gsm = loginAndAddUserDto.Gsm;
@@ -45,12 +46,27 @@ namespace Ide.Business.Concrete
 
         public IQueryable<AppUser> UserGetAll()
         {
-            return unitOfWork.Users.GetAll().Include(u=>u.UserType);
+            return unitOfWork.Users.GetAll().Include(u=>u.UserType).Include(u=>u.ShoppingBasket).Include(u=>u.Orders);
         }
 
         public AppUser GetById(int id)
         {
             return unitOfWork.Users.GetById(id);
+        }
+
+        public AppUser UserUpdate(AppUser user)
+        {
+            AppUser appUser = unitOfWork.Users.GetAll(u => u.Id == user.Id).FirstOrDefault();
+            appUser.Name = user.Name;
+            appUser.Email = user.Email;
+            appUser.UserTypeId = user.UserTypeId;
+            appUser.Password = user.Password;
+            
+
+            unitOfWork.Users.Update(appUser);
+            unitOfWork.Save();
+            return appUser;
+
         }
     }
 }

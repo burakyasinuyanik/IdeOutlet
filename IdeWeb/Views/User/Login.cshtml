@@ -103,6 +103,10 @@
                                 <form action="UserAdd" method="post">
 
                                     <div class="mb-3">
+                                        <label class="form-label" for="useremail">Adınız</label>
+                                        <input asp-for="Name" required type="text" class="form-control" id="useremail" placeholder="Adınızı giriniz.">
+                                    </div>
+                                    <div class="mb-3">
                                         <label class="form-label" for="useremail">Email</label>
                                         <input asp-for="Email" required type="email" class="form-control" id="useremail" placeholder="Email giriniz.">
                                     </div>

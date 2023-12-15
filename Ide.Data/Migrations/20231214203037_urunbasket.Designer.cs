@@ -4,6 +4,7 @@ using Ide.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ide.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231214203037_urunbasket")]
+    partial class urunbasket
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -271,7 +274,7 @@ namespace Ide.Data.Migrations
             modelBuilder.Entity("Ide.Models.AppUser", b =>
                 {
                     b.HasOne("Ide.Models.ShoppingBasket", "ShoppingBasket")
-                        .WithMany("AppUsers")
+                        .WithMany()
                         .HasForeignKey("ShoppingBasketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -325,11 +328,6 @@ namespace Ide.Data.Migrations
             modelBuilder.Entity("Ide.Models.Product", b =>
                 {
                     b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("Ide.Models.ShoppingBasket", b =>
-                {
-                    b.Navigation("AppUsers");
                 });
 #pragma warning restore 612, 618
         }

@@ -13,7 +13,9 @@ namespace Ide.Models
         public string Gsm { get; set; }
         public int UserTypeId { get; set; }
         public virtual UserType UserType { get; set; }
-        public virtual ICollection<Order> Orders { get; set; }
+        public int ShoppingBasketId { get; set; }
+        public virtual ShoppingBasket ShoppingBasket { get; set; } = new ShoppingBasket();
+        public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
     }
 }

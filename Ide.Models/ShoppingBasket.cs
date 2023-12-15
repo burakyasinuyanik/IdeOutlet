@@ -8,8 +8,8 @@ namespace Ide.Models
 {
     public class ShoppingBasket:BaseModel
     {
-        public int AppUserId { get; set; }
-        public virtual AppUser AppUser { get; set; }
+    
+         public virtual ICollection< AppUser> AppUsers { get; set; }=new List< AppUser>();
         public virtual ICollection<Product> Products { get; set; }= new List<Product>();
     }
 }

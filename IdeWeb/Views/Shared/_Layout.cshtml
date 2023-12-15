@@ -21,7 +21,7 @@
     <link href="~/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
     <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
-
+    <link href="https://cdn.datatables.net/v/dt/dt-1.13.8/datatables.min.css" rel="stylesheet">
     @await RenderSectionAsync("Styles", required: false)
 
 </head>
@@ -165,7 +165,7 @@
                         </li>
 
                         <li>
-                            <a asp-action="Usershow" asp-controller="User">
+                            <a asp-action="UserShow" asp-controller="User">
                                <span class="badge rounded-pill bg-primary float-end">148</span>
                                 <span>Müşteriler</span>
                             </a>
@@ -179,7 +179,7 @@
                         </li>
 
                         <li>
-                            <a href="index.html">
+                            <a asp-action="Index" asp-controller="ShoppingBasket">
                                 <i class="uil-comment-edit"></i><span class="badge rounded-pill bg-primary float-end">1</span>
                                 <span>Sepetim</span>
                             </a>

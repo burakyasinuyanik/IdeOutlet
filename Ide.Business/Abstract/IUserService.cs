@@ -15,5 +15,6 @@ namespace Ide.Business.Abstract
         bool UserContains(string email);
         IQueryable<AppUser> UserGetAll();
         AppUser GetById(int id);
+        AppUser UserUpdate(AppUser user);
     }
 }

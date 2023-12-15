@@ -13,5 +13,7 @@ namespace Ide.Models
         public string ProductNo { get; set; }
         public int Stock { get; set; }
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+        public virtual ICollection<ShoppingBasket> ShoppingBaskets { get; set; } = new List<ShoppingBasket>();
+
     }
 }

@@ -8,6 +8,7 @@ namespace Ide.Models.DTOs
 {
     public class LoginAndAddUserDto
     {
+        public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string Gsm { get; set; }
