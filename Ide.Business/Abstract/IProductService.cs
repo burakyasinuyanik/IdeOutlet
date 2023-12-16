@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ide.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,8 @@ namespace Ide.Business.Abstract
     public interface IProductService
     {
         IQueryable GetAll();
-        
+        public void ProductUpdate(Product product);
+        public Product ProductGetById(int productId);
+        IQueryable GetAllCustomer();
     }
 }

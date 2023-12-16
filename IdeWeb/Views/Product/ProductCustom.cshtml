@@ -1,0 +1,243 @@
+﻿
+
+<div class="card border border-primary col-12">
+    <div class="card-header bg-primary border-primary">
+        <h5 class="my-0 text-white"><i class="uil uil-user me-3"></i>Ürün Listesi</h5>
+
+        <div class="card-title"><a class="btn btn-success" onclick="newProductAdd()">Yeni Ürün Yükle</a></div>
+
+      
+
+      
+
+    </div><!-- end card-header -->
+    <div class="card-body" style="overflow:auto">
+
+
+        <table id="tblProduct" class="table table-striped table-responsive table-bordered dt-responsive nowrap dataTable no-footer dtr-inline" style="border-collapse: collapse; border-spacing: 0px; width: 100%;" role="grid" aria-describedby="datatable-buttons_info"></table>
+
+    </div><!-- end card-body -->
+</div>
+<div class="modal fade" id="modalAddUpdate" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleId">Kullanıcı Güncelle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-target="#modalAddUpdate" aria-label="Close"></button>
+            </div>
+            <form id="frmAddUser" class="needs-validation">
+                <div class="modal-body">
+
+                    <div class="container">
+
+                        <div class="mb-3 row">
+                            <label for="inputName" class="col-4 col-form-label">Ürün Adı</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control input-mask" parsley-type="text" required id="txtName" placeholder="Ürün Adı">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="inputStock" class="col-4 col-form-label">Stok</label>
+                            <div class="col-8">
+                                <input type="number" class="form-control input-mask" required id="txtStock" placeholder="Stok">
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <label for="inputPrice" class="col-4 col-form-label">Fiyat</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control input-mask" required id="txtPrice" placeholder="Fiyat">
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <label for="inputBarcode" class="col-4 col-form-label">Barkod</label>
+                            <div class="col-8">
+                                <input type="number" class="form-control input-mask" parsley-type="number" required id="txtBarcode" placeholder="Barkod">
+                            </div>
+                        </div>
+
+
+
+                        <div class="mb-3 row">
+                            <label for="inputProductNo" class="col-4 col-form-label">Ürün No</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control input-mask" id="txtProductNo" required placeholder="Ürün No">
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <label for="inputProductDes" class="col-4 col-form-label">Ürün Açıklaması</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control input-mask" id="inputProductDes" required placeholder="Ürün Açıklaması">
+                            </div>
+                        </div>
+
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="productIsActive" >
+                            <label class="form-check-label" for="productIsActive">Ürün Aktif Mi?</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-target="#modalAddUpdate">Kapat</button>
+                    <button type="submit" id="btnSave" class="btn btn-primary">Ekle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var DataTable;
+
+        $(document).ready(function () {
+
+            fillDateTable();
+        })
+
+        function newProductAdd(){
+            $("input").val("");
+            $("#modalAddUpdate").modal("show");
+
+        }
+
+        function fillDateTable() {
+            return $("#tblProduct").DataTable({
+                ajax: "/Product/GetAll/",
+                type: "GET",
+                dom: "Bfrtip",
+                columns: [
+                    { data: "id", title: 'Id' },
+                   
+                    { data: "name", title: "Ürün Adı" },
+                    { data: "stock", title: "Stok" },
+
+                    { data: "price", title: "Fiyat" },
+                    { data: "barcode", title: "Barkod" },
+                    { data: "productNo", title: "Ürün No" },
+                    { data: "isActive",title:"ürün aktif mi?" },
+                    {
+                        data: "id", title: "İşlemler", render: function (data) {
+                            return `  <a title="Kullanıcıyı Sil" href="#" class="px-1 text-danger" style = "opacity:60%" onclick="deleteUser(${data})" > <i class="uil uil-trash-alt font-size-24" > </i></a > <a href="#" class="px-1 text-primary" title = "Kullanıcı Düzenle" style="opacity: 60%;" onclick="updateProduct(${data})" > <i class="uil uil-edit font-size-24" > </i></a>  `;
+
+                        }
+                    }
+
+                ],
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Turkish.json",
+                    searchPlaceholder: "Ara"
+                },
+            })
+        }
+
+        function deleteUser(userId) {
+            Swal.fire({
+                title: 'Silmek istediğinizden emin misiniz ?',
+                showCancelButton: true,
+                confirmButtonText: 'Evet',
+                cancelButtonText: 'Vazgeç',
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/User/Delete',
+                        data: { userId: userId },
+                        success: function () {
+                            toastr.success("İşlem Başarılı", "Kullanıcı Silindi !");
+                            DataTable.ajax.reload();
+                        }
+                    })
+                }
+            })
+        }
+        function updateProduct(productId) {
+            $("#modalAddUpdate").modal("show");
+
+
+            $.ajax({
+                type: 'POST',
+                url: '/Product/ProductGetById/',
+                data: { productId: productId },
+                success: function (res) {
+                    fillUserTypes(res.userTypeId);
+                    $("#txtName").val(res.name);
+                    $("#txtStock").val(res.stock);
+
+                    $("#txtPrice").val(res.price);
+                    $("#txtBarcode").val(res.barcode);
+                    $("#txtProductNo").val(res.productNo);
+                    $("#inputProductDes").val(res.description);
+                    if(res.isActive==true){
+                        $('#productIsActive').prop('checked', true);
+
+                    }else{
+                        $('#productIsActive').prop('checked', false);
+
+                    }
+                    
+
+
+                }
+            });
+
+
+            $("#btnSave").off().text('Güncelle').removeClass('btn-success').addClass('btn-primary').click(function () {
+                event.preventDefault();
+
+                if ($("#frmAddUser").parsley().isValid() === false) {
+                    $('#frmAddUser').parsley().validate();
+                    $("#frmAddUser").addClass("was-validated");
+                } else {
+
+                    var formData = new FormData();
+
+                    formData.append("id", productId);
+                    formData.append("name", $("#txtName").val());
+                    formData.append("stock", $("#txtStock").val());
+                    formData.append("price", $("#txtPrice").val());
+                    formData.append("barcode", $("#txtBarcode").val());
+                    formData.append("productNo", $("#txtProductNo").val());
+                    formData.append("description", $("#inputProductDes").val());
+                    formData.append("isActive", $('#productIsActive').is(":checked"));
+
+
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Product/ProductUpdate/',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function () {
+                            $("#modalAddUpdate").modal('hide');
+
+                            toastr.success("İşlem Başarılı", "Ürün Başarılı Şekilde Güncellendi !");
+                            $('#tblProduct').DataTable().ajax.reload();
+
+                        },
+                        error: function (res) {
+                            toastr.error("İşlem başarısız", "Ürün Güncellenemedi !");
+                        }
+                    });
+                }
+            });
+        }
+        function fillUserTypes(userTypeId) {
+
+            $.ajax({
+                url: '/UserType/GetAll',
+                success: function (res) {
+                    $("#ddlUserType").empty();
+                    for (var item of res) {
+                        $("#ddlUserType").append(new Option(item.name, item.id, false, item.id == userTypeId));
+                    }
+                }
+            })
+        }
+    </script>
+}

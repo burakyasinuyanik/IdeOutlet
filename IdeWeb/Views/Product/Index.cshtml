@@ -51,9 +51,9 @@
         function fillProduct(){
 
             $.ajax({
-                url:"/Product/GetAll/",
+                url:"/Product/GetAllCustomer/",
                 success:function(res){
-                    for(var item of res){
+                    for(var item of res.data){
                         $("#productAll").append(`
                                 
             <div class="col-xl-3 col-sm-6">
