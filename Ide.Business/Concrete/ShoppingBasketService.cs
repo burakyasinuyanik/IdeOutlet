@@ -30,6 +30,22 @@ namespace Ide.Business.Concrete
             return unitOfWork.Products.GetAll().Where(u => u.ShoppingBaskets.Any(u => u.AppUsers.Any(u => u.Email == mail)));
         }
 
+        public bool ProductAdd(string mail, int id)
+        {
+         ShoppingBasket basket = unitOfWork.ShoppingBaskets.GetAll().Where(u => u.AppUsers.Any(u => u.Email == mail)).Include(u => u.Products).FirstOrDefault();
+
+           if( basket.Products.Contains(unitOfWork.Products.GetFirstOrDefault(u => u.Id == id)))
+            {
+                return false;
+            }
+            else
+            {
+                basket.Products.Add(unitOfWork.Products.GetById(id));
+                unitOfWork.Save();
+                return true;
+            }
+        }
+
         public void ProductDown(string mail, int id)
         {
          ShoppingBasket basket = unitOfWork.ShoppingBaskets.GetAll().Where(u => u.AppUsers.Any(u => u.Email == mail)).Include(u => u.Products).FirstOrDefault();

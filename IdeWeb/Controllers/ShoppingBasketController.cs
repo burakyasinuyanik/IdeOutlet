@@ -29,5 +29,17 @@ namespace Ide.Web.Controllers
         
             return Ok(new { result = true, message = "Ürün sepetinizden çıkartıldı !" });
         }
+        public IActionResult ProductAdd(string mail,int id)
+        {
+            if(shopingBasketService.ProductAdd(mail, id))
+            {
+                return Ok(new { result = true, message = "Ürün sepetinize eklendi !" });
+            }
+            else
+            {
+                return Ok(new {result=false,message="Sepetinize aynı üründen bir adet ekleyebilirsiniz !"});
+            }
+           
+        }
     }
 }
