@@ -10,5 +10,8 @@ namespace Ide.Models
     {
        public int AppUserId { get; set; }
         public virtual AppUser AppUser { get; set; }
+       
+        public virtual ICollection< OrderProduct> OrderProducts { get; set; }= new List<OrderProduct>();
+       
     }
 }

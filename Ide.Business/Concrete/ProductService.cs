@@ -1,6 +1,8 @@
 ﻿using Ide.Business.Abstract;
 using Ide.Models;
 using Ide.Repository.Shared.Abstract;
+using Ide.Utility;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -19,6 +21,12 @@ namespace Ide.Business.Concrete
             this.unitOfWork=unitOfWork;
         }
 
+        public void Delete(int productId)
+        {
+            unitOfWork.Products.Delete(unitOfWork.Products.GetById(productId));
+            unitOfWork.Save();
+        }
+
         public IQueryable GetAll()
         {
           return  unitOfWork.Products.GetAll();
@@ -27,6 +35,27 @@ namespace Ide.Business.Concrete
         public IQueryable GetAllCustomer()
         {
             return unitOfWork.Products.GetAll(u=>u.IsActive==true);
+        }
+
+        public async Task NewProduct(Product product,string picture)
+        {
+            Product product1=product;
+         
+                byte[] imageBytes = Convert.FromBase64String(picture.ToString().Split(',')[1]);
+                string fileName = product1.Name.TextClean() + "-" + product1.ProductNo + ".png";
+                if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "Product")))
+                {
+                    Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "Product"));
+                }
+
+                string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "Product", fileName);
+
+                System.IO.File.WriteAllBytes(filePath, imageBytes);
+                product1.Picture = fileName;
+                unitOfWork.Products.Add(product1);
+                unitOfWork.Save();
+          
+           
         }
 
         public Product ProductGetById(int productId)

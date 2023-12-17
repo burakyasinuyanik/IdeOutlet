@@ -14,6 +14,7 @@ namespace Ide.Repository.Shared.Abstract
         IRepository<Product> Products { get; }
         IRepository<ShoppingBasket> ShoppingBaskets { get; }
         IRepository<UserType> UserTypes { get; }
+        IRepository<OrderProduct> OrderProducts { get; }
 
         void Save();
     }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ide.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231210201644_Inıtıals")]
-    partial class Inıtıals
+    [Migration("20231217140309_in")]
+    partial class @in
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,10 +69,15 @@ namespace Ide.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ShoppingBasketId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UserTypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ShoppingBasketId");
 
                     b.HasIndex("UserTypeId");
 
@@ -114,16 +119,74 @@ namespace Ide.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProductId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
 
-                    b.HasIndex("ProductId");
-
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Ide.Models.OrderProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Barcode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCraeted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("Guid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Picture")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("ProductNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderPoducts");
                 });
 
             modelBuilder.Entity("Ide.Models.Product", b =>
@@ -162,6 +225,9 @@ namespace Ide.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Picture")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
@@ -169,15 +235,10 @@ namespace Ide.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ShoppingBasketId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Stock")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ShoppingBasketId");
 
                     b.ToTable("Products");
                 });
@@ -189,9 +250,6 @@ namespace Ide.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AppUserId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateCraeted")
                         .HasColumnType("datetime2");
@@ -218,8 +276,6 @@ namespace Ide.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
 
                     b.ToTable("ShoppingBaskets");
                 });
@@ -261,13 +317,36 @@ namespace Ide.Data.Migrations
                     b.ToTable("UserTypes");
                 });
 
+            modelBuilder.Entity("ProductShoppingBasket", b =>
+                {
+                    b.Property<int>("ProductsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShoppingBasketsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductsId", "ShoppingBasketsId");
+
+                    b.HasIndex("ShoppingBasketsId");
+
+                    b.ToTable("ProductShoppingBasket");
+                });
+
             modelBuilder.Entity("Ide.Models.AppUser", b =>
                 {
+                    b.HasOne("Ide.Models.ShoppingBasket", "ShoppingBasket")
+                        .WithMany("AppUsers")
+                        .HasForeignKey("ShoppingBasketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Ide.Models.UserType", "UserType")
-                        .WithMany()
+                        .WithMany("appUsers")
                         .HasForeignKey("UserTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ShoppingBasket");
 
                     b.Navigation("UserType");
                 });
@@ -280,29 +359,33 @@ namespace Ide.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Ide.Models.Product", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("ProductId");
-
                     b.Navigation("AppUser");
                 });
 
-            modelBuilder.Entity("Ide.Models.Product", b =>
+            modelBuilder.Entity("Ide.Models.OrderProduct", b =>
                 {
-                    b.HasOne("Ide.Models.ShoppingBasket", null)
-                        .WithMany("Products")
-                        .HasForeignKey("ShoppingBasketId");
-                });
-
-            modelBuilder.Entity("Ide.Models.ShoppingBasket", b =>
-                {
-                    b.HasOne("Ide.Models.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
+                    b.HasOne("Ide.Models.Order", "Order")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AppUser");
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("ProductShoppingBasket", b =>
+                {
+                    b.HasOne("Ide.Models.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ide.Models.ShoppingBasket", null)
+                        .WithMany()
+                        .HasForeignKey("ShoppingBasketsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Ide.Models.AppUser", b =>
@@ -310,14 +393,19 @@ namespace Ide.Data.Migrations
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("Ide.Models.Product", b =>
+            modelBuilder.Entity("Ide.Models.Order", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("OrderProducts");
                 });
 
             modelBuilder.Entity("Ide.Models.ShoppingBasket", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("AppUsers");
+                });
+
+            modelBuilder.Entity("Ide.Models.UserType", b =>
+                {
+                    b.Navigation("appUsers");
                 });
 #pragma warning restore 612, 618
         }

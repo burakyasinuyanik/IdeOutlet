@@ -116,16 +116,74 @@ namespace Ide.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProductId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
 
-                    b.HasIndex("ProductId");
-
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Ide.Models.OrderProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Barcode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCraeted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("Guid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Picture")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("ProductNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderPoducts");
                 });
 
             modelBuilder.Entity("Ide.Models.Product", b =>
@@ -162,6 +220,9 @@ namespace Ide.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Picture")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Price")
@@ -277,7 +338,7 @@ namespace Ide.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Ide.Models.UserType", "UserType")
-                        .WithMany()
+                        .WithMany("appUsers")
                         .HasForeignKey("UserTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -295,11 +356,18 @@ namespace Ide.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Ide.Models.Product", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("ProductId");
-
                     b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("Ide.Models.OrderProduct", b =>
+                {
+                    b.HasOne("Ide.Models.Order", "Order")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("ProductShoppingBasket", b =>
@@ -322,14 +390,19 @@ namespace Ide.Data.Migrations
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("Ide.Models.Product", b =>
+            modelBuilder.Entity("Ide.Models.Order", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("OrderProducts");
                 });
 
             modelBuilder.Entity("Ide.Models.ShoppingBasket", b =>
                 {
                     b.Navigation("AppUsers");
+                });
+
+            modelBuilder.Entity("Ide.Models.UserType", b =>
+                {
+                    b.Navigation("appUsers");
                 });
 #pragma warning restore 612, 618
         }

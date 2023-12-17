@@ -21,6 +21,7 @@ namespace Ide.Repository.Shared.Concrete
         public IRepository<ShoppingBasket> ShoppingBaskets { get; private set; }
 
         public IRepository<UserType> UserTypes { get; private set; }
+        public IRepository<OrderProduct> OrderProducts { get; private set; }
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -30,6 +31,7 @@ namespace Ide.Repository.Shared.Concrete
             Products = new Repository<Product>(_context);
             ShoppingBaskets= new Repository<ShoppingBasket>(_context);
             UserTypes=new Repository<UserType>(_context);
+            OrderProducts=new Repository<OrderProduct>(_context);
         }
         public void Save()
         {

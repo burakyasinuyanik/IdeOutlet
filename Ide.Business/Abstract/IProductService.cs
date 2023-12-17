@@ -1,4 +1,5 @@
 ﻿using Ide.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,7 @@ namespace Ide.Business.Abstract
         public void ProductUpdate(Product product);
         public Product ProductGetById(int productId);
         IQueryable GetAllCustomer();
+        Task NewProduct(Product product,string picture);
+        public void Delete(int productId);
     }
 }

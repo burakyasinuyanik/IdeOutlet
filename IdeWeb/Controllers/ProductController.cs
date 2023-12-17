@@ -44,5 +44,27 @@ namespace Ide.Web.Controllers
         {
             return Json(new { data = productService.GetAllCustomer() });
         }
+        [HttpPost]
+        public async Task <IActionResult> NewProduct(Product product,string picture)
+        {
+          
+            try {
+               await productService.NewProduct(product,picture);
+            
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { result = false, message = "ürün eklenirken hata oluştu! " + ex.Message });
+            }
+            return Ok(new { result = true, message = "Ürün eklendi !" });
+
+        }
+        [HttpPost]
+        public IActionResult Delete(int productId)
+        {
+
+            productService.Delete(productId);
+            return Ok();
+        }
     }
 }

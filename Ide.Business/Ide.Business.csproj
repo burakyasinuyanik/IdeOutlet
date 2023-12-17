@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Ide.Models\Ide.Models.csproj" />
     <ProjectReference Include="..\Ide.Repo\Ide.Repository.csproj" />
+    <ProjectReference Include="..\Ide.Utility\Ide.Utility.csproj" />
   </ItemGroup>
 
 </Project>

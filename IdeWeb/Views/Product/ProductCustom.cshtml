@@ -22,14 +22,23 @@
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalTitleId">Kullanıcı Güncelle</h5>
+                <h5 class="modal-title" id="modalTitleId">Ürün</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-target="#modalAddUpdate" aria-label="Close"></button>
             </div>
-            <form id="frmAddUser" class="needs-validation">
+            <div id="frmAddUser" class="needs-validation">
                 <div class="modal-body">
 
                     <div class="container">
 
+
+                        <div class="mb-3 row">
+                            <label for="inputName" class="col-4 col-form-label">Fotoğraf</label>
+                            <img src="" id="imgProfilePicture" alt="" class="avatar-lg rounded-circle img-thumbnail">
+                            <input type="file" name="uploadfile" id="fileProfilePicture" style="display:none;" accept=".jpeg,.jpg,.png" />
+                            <div class="col-8">
+                                <label for="fileProfilePicture"><a class="btn btn-success btn-sm">Seç</a></label>
+                            </div>
+                        </div>
                         <div class="mb-3 row">
                             <label for="inputName" class="col-4 col-form-label">Ürün Adı</label>
                             <div class="col-8">
@@ -83,7 +92,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-target="#modalAddUpdate">Kapat</button>
                     <button type="submit" id="btnSave" class="btn btn-primary">Ekle</button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
@@ -91,15 +100,91 @@
 @section Scripts{
     <script>
         var DataTable;
-
+        var picture64;
         $(document).ready(function () {
 
             fillDateTable();
         })
 
+
+        $("#fileProfilePicture").on('change', function () {
+            var instantUp = $("#fileProfilePicture").prop('files')[0];
+            var readerIns = new FileReader();
+            readerIns.readAsDataURL(instantUp);
+            readerIns.onload = function () {
+                //$("#displayDiv").show();
+                $("#imgProfilePicture").attr('src', readerIns.result);
+               
+
+            }
+        });
+
         function newProductAdd(){
+
             $("input").val("");
+           
+            $("#imgProfilePicture").attr('src', "");
             $("#modalAddUpdate").modal("show");
+            $("#frmAddUser").removeClass("was-validated");
+            $('#frmAddUser').parsley().reset();
+
+            $("#imgProfilePicture").attr('src', "");
+
+            $("#btnSave").off().text('Ekle').removeClass('btn-success').addClass('btn-primary').click(function () {
+
+                if ($("#frmAddUser").parsley().isValid() === false) {
+                    $('#frmAddUser').parsley().validate();
+                    $("#frmAddUser").addClass("was-validated");
+                } else {
+
+                   
+
+                    let product={
+                        name: $("#txtName").val(),
+                        stock: $("#txtStock").val(),
+                        price: $("#txtPrice").val(),
+                        barcode: $("#txtBarcode").val(),
+                        productNo: $("#txtProductNo").val(),
+                        description: $("#inputProductDes").val(),
+                        isActive: $('#productIsActive').is(":checked")
+                    };
+
+                    var instantUp = $("#fileProfilePicture").prop('files')[0];
+                    var readerIns = new FileReader();
+                    readerIns.readAsDataURL(instantUp);
+
+                    readerIns.onload = function () {
+                        $.ajax({
+                            type: "Post",
+                            url: "/Product/NewProduct/",
+                            data: {
+                                picture: readerIns.result,
+                                product:product
+                            },
+                           
+                           
+                            success: function (res) {
+                                $("#modalAddUpdate").modal('hide');
+
+                                toastr.success(res.message);
+                                $('#tblProduct').DataTable().ajax.reload();
+
+                            },
+                            error: function (res) {
+
+                                toastr.error("HATA", res.responseText);
+
+                            }
+                        })
+                    
+                    }
+
+                   
+
+                    }
+
+            })
+
 
         }
 
@@ -120,7 +205,7 @@
                     { data: "isActive",title:"ürün aktif mi?" },
                     {
                         data: "id", title: "İşlemler", render: function (data) {
-                            return `  <a title="Kullanıcıyı Sil" href="#" class="px-1 text-danger" style = "opacity:60%" onclick="deleteUser(${data})" > <i class="uil uil-trash-alt font-size-24" > </i></a > <a href="#" class="px-1 text-primary" title = "Kullanıcı Düzenle" style="opacity: 60%;" onclick="updateProduct(${data})" > <i class="uil uil-edit font-size-24" > </i></a>  `;
+                            return `  <a title="Kullanıcıyı Sil" href="#" class="px-1 text-danger" style = "opacity:60%" onclick="deleteProduct(${data})" > <i class="uil uil-trash-alt font-size-24" > </i></a > <a href="#" class="px-1 text-primary" title = "Kullanıcı Düzenle" style="opacity: 60%;" onclick="updateProduct(${data})" > <i class="uil uil-edit font-size-24" > </i></a>  `;
 
                         }
                     }
@@ -133,7 +218,7 @@
             })
         }
 
-        function deleteUser(userId) {
+        function deleteProduct(productId) {
             Swal.fire({
                 title: 'Silmek istediğinizden emin misiniz ?',
                 showCancelButton: true,
@@ -145,11 +230,12 @@
 
                     $.ajax({
                         type: 'POST',
-                        url: '/User/Delete',
-                        data: { userId: userId },
+                        url: '/Product/Delete/',
+                        data: {productId:productId},
                         success: function () {
-                            toastr.success("İşlem Başarılı", "Kullanıcı Silindi !");
-                            DataTable.ajax.reload();
+                            toastr.success("İşlem Başarılı", "Ürün Silindi !");
+                            $('#tblProduct').DataTable().ajax.reload();
+
                         }
                     })
                 }
@@ -157,16 +243,19 @@
         }
         function updateProduct(productId) {
             $("#modalAddUpdate").modal("show");
+            $("#frmAddUser").removeClass("was-validated");
+            $('#frmAddUser').parsley().reset();
 
-
+            
             $.ajax({
                 type: 'POST',
                 url: '/Product/ProductGetById/',
                 data: { productId: productId },
                 success: function (res) {
-                    fillUserTypes(res.userTypeId);
+                    
                     $("#txtName").val(res.name);
                     $("#txtStock").val(res.stock);
+                    $("#imgProfilePicture").attr('src', `/images/product/${res.picture}`);
 
                     $("#txtPrice").val(res.price);
                     $("#txtBarcode").val(res.barcode);
