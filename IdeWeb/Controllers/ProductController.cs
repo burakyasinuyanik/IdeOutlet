@@ -40,6 +40,10 @@ namespace Ide.Web.Controllers
 
             return Json(productService.ProductGetById(productId));
         }
+        public IActionResult GetProductRemainingStock(string productNo)
+        {
+            return Json(productService.GetProductRemainingStock(productNo));
+        }
         public IActionResult GetAllCustomer()
         {
             return Json(new { data = productService.GetAllCustomer() });

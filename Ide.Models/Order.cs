@@ -8,7 +8,11 @@ namespace Ide.Models
 {
     public class Order : BaseModel
     {
-       public int AppUserId { get; set; }
+        public double? TotalAmount { get; set; }
+        public int? OrderTypeId { get; set; }
+        public virtual OrderType? OrderType { get; set; }
+
+        public int AppUserId { get; set; }
         public virtual AppUser AppUser { get; set; }
        
         public virtual ICollection< OrderProduct> OrderProducts { get; set; }= new List<OrderProduct>();

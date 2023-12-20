@@ -19,6 +19,8 @@ namespace Ide.Business.Configurations
             services.AddScoped<IShopingBasketService, ShoppingBasketService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService,OrderService>();
+            services.AddScoped<IOrderTypeService,OrderTypeService>();
+            services.AddScoped<IOrderProductTypeService,OrderProductTypeService>();
         }
     }
 }

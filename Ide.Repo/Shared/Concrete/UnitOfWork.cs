@@ -23,6 +23,10 @@ namespace Ide.Repository.Shared.Concrete
         public IRepository<UserType> UserTypes { get; private set; }
         public IRepository<OrderProduct> OrderProducts { get; private set; }
 
+        public IRepository<OrderProductType> OrderProductTypes { get; private set; }
+
+        public IRepository<OrderType> OrderTypes { get; private set; }
+        public IRepository<ProductType> ProductTpes { get; private set; }
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -32,6 +36,9 @@ namespace Ide.Repository.Shared.Concrete
             ShoppingBaskets= new Repository<ShoppingBasket>(_context);
             UserTypes=new Repository<UserType>(_context);
             OrderProducts=new Repository<OrderProduct>(_context);
+            OrderTypes = new Repository<OrderType>(_context);
+            ProductTpes=new Repository<ProductType>(_context);
+            OrderProductTypes=new Repository<OrderProductType>(_context);
         }
         public void Save()
         {

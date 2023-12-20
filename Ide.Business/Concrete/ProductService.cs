@@ -37,10 +37,15 @@ namespace Ide.Business.Concrete
             return unitOfWork.Products.GetAll(u=>u.IsActive==true);
         }
 
+        public int GetProductRemainingStock(string productNo)
+        {
+            return unitOfWork.Products.GetFirstOrDefault(u=>u.ProductNo==productNo).RemainingStock.Value;
+        }
+
         public async Task NewProduct(Product product,string picture)
         {
             Product product1=product;
-         
+            product1.RemainingStock = product.Stock;
                 byte[] imageBytes = Convert.FromBase64String(picture.ToString().Split(',')[1]);
                 string fileName = product1.Name.TextClean() + "-" + product1.ProductNo + ".png";
                 if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "Product")))

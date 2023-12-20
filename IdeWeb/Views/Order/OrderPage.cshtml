@@ -1,0 +1,196 @@
+﻿@using Ide.Models;
+@model Order;
+
+<div class="row">
+
+    <div class="col-xl-12">
+        <div class="card checkout-order-summary">
+            <div class="card-body">
+                <div class="p-3 bg-light mb-4">
+                    <h5 class="font-size-16 mb-0"> Sipariş Özeti <span class="float-end ms-2">@Model.Id <span>'nolu sipariş</span></span></h5>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="orderStatus" aria-label="Floating label select example">
+                            </select>
+                            <label for="floatingSelectGrid">Sipariş Statüsü Seçiniz</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-centered mb-0 table-nowrap">
+                        <thead>
+                            <tr>
+                                <th class="border-top-0" style="width: 110px;" scope="col">Ürün Görselleri</th>
+                                <th class="border-top-0" scope="col">Ürün Adı</th>
+                                <th class="border-top-0" scope="col">Fiyat</th>
+                                <th class="border-top-0" scope="col">Ürün Satü</th>
+                                <th class="border-top-0" scope="col">Ürün Kalan Stok</th>
+
+                            </tr>
+                        </thead>
+                   
+
+                           
+                          
+                              
+                                   
+                </div>
+            </div>
+          
+            <tbody id="orderProducts">
+                
+               
+             
+
+             
+           
+            </tbody>
+            <tr>
+                <td colspan="2">
+                    <h5 class="font-size-14 m-0">Toplam Fiyat :</h5>
+                </td>
+                <td>
+                    @Model.TotalAmount <span> TL</span>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td colspan="2">
+                    <h5 class="font-size-14 m-0">Onaylanan Ürün Fiyatı Toplamı :</h5>
+                </td>
+                <td>
+                    $ 25
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <h5 class="font-size-14 m-0">İptal Edilen Ürün Fiyat Toplamı :</h5>
+                </td>
+                <td>
+                    $ 18.20
+                </td>
+            </tr>
+
+            <tr class="bg-light">
+                <td colspan="2">
+                    <h5 class="font-size-14 m-0"><b>Müşterinin Ödeyecek Olduğu Fiyat :</b></></h5>
+                </td>
+                <td>
+                    <b> $ 745.2</b>
+                </td>
+            </tr>
+            </table>
+
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            fillOrderStatus();
+            fillOrderProduct();
+
+                            $("#orderStatus").change(function () {
+
+                                $.ajax({
+                                    type:"post",
+                                    url:"/Order/ChangeOrderType/",
+                                    data:{
+                                        orderId:@Model.Id,
+                                          orderTypeId: $("#orderStatus").val(),
+                                    },
+                                    success:function(res){
+                                       toastr.success(res.message);
+                                    }
+                                })
+
+
+                
+                            });
+
+        })
+
+        function fillOrderProduct(){
+            $.ajax({
+                url:"/Order/OrderDetail/",
+                data:{
+                    orderId:@Model.Id,
+                },
+                success:function(res){
+                    $("#orderProducts").empty();
+
+                    for (var item of res.orderProducts) {
+                        $("#orderProducts").append(`
+
+                                                   
+                        <tr id="item-${item.id}">
+                                                        <th scope="row"><img src="/images/product/${item.picture}" alt="product-img" title="product-img" class="avatar-md"></th>
+                                                        <td>
+                                                            <h5 class="font-size-14 text-truncate"><a href="ecommerce-product-detail.html" class="text-reset ">${item.name}</a></h5>
+                                                            <p class="text-muted mb-0">${item.description}</p>
+                                                        </td>
+                                                        <td>${item.price}<span> TL</span></td>
+                                                        <td>
+                                                                                            <div class="form-floating mb-3"  >
+                                                                <select class="form-select" id="OrderProduct-${item.id}" aria-label="Floating label select example">
+                                                                </select>
+                                                                <label for="floatingSelectGrid">Ürün Statüsü Seçiniz</label>
+                                                            </div>
+                                                        </td>
+                                                                <td><p class="text-muted mb-0" id="rStock-${item.productNo}"></p><span class="text-muted mb-0"> Adet</span></td>
+                          </tr>                         
+
+
+                `)
+                        fillOrderProductStatus(item.id, item.orderProductTypeId);
+                        getProductRemainingStock(item.productNo);
+                    }
+                    
+                }
+
+            })
+        }
+
+        function fillOrderStatus() {
+            $.ajax({
+
+                url: "/Order/GetOrderStatus",
+                success: function (res) {
+                    $("#orderStatus").empty();
+                    for (var item of res) {
+                        $("#orderStatus").append(new Option(item.name, item.id, false, item.id == @Model.OrderTypeId));
+                    }
+                }
+            })
+        }
+        function getProductRemainingStock(productNo){
+            $.ajax({
+                url: "/Product/GetProductRemainingStock/",
+                data:{
+                    productNo: productNo,
+                },
+                success:function(res){
+                    $("#rStock-"+productNo).text(res);
+                }
+            })
+        }
+
+        function fillOrderProductStatus(productId, typeId) {
+
+            $.ajax({
+
+                url:"/Order/GetOrderProductStatus",
+                success: function (res) {
+                    $(`#OrderProduct-` + productId).empty();
+                    for (var item of res) {
+                        $("#OrderProduct-" + productId).append(new Option(item.name, item.id, false, item.id == typeId));
+                    }
+                }
+            })
+        }
+
+    </script>
+}

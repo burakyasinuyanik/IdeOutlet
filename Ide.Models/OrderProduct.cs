@@ -20,7 +20,8 @@ namespace Ide.Models
         public string Barcode { get; set; }
         public string ProductNo { get; set; }
         public int Stock { get; set; }
-        public string Status { get; set; }
+       public int? OrderProductTypeId { get; set; }
+        public virtual OrderProductType? OrderProductType { get; set; }
        
 
 

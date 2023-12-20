@@ -16,5 +16,6 @@ namespace Ide.Business.Abstract
         IQueryable GetAllCustomer();
         Task NewProduct(Product product,string picture);
         public void Delete(int productId);
+        public int GetProductRemainingStock(string productNo);
     }
 }

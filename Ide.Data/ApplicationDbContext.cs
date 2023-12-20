@@ -26,6 +26,8 @@ namespace Ide.Data
         public virtual DbSet<UserType> UserTypes { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<OrderProduct> OrderPoducts { get; set; }
-
+        public virtual DbSet<OrderType> OrderTypes { get; set; }
+        public virtual DbSet<ProductType> ProductTypes { get; set; }
+        public virtual DbSet<OrderProductType> OrderProductTypes { get; set; }
     }
 }

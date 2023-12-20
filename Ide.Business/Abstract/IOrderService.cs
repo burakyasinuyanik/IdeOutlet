@@ -11,5 +11,10 @@ namespace Ide.Business.Abstract
     {
         IQueryable GetAll(string mail);
         public Order NewOrder(string mail);
+        IQueryable GetAllFull();
+        public Order GetOrderDetail(int orderId);
+        public Order GetOrderPage(int orderId);
+        public void ChangeOrderType(int orderId, int orderTypeId);
+
     }
 }
