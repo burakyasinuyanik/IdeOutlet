@@ -111,6 +111,9 @@
                 
                             });
 
+
+         
+
         })
 
         function fillOrderProduct(){
@@ -135,7 +138,7 @@
                                                         <td>${item.price}<span> TL</span></td>
                                                         <td>
                                                                                             <div class="form-floating mb-3"  >
-                                                                <select class="form-select" id="OrderProduct-${item.id}" aria-label="Floating label select example">
+                                                                <select class="form-select productSelect" id="orderProduct-${item.id}" dbclick="a(${item.id})" aria-label="Floating label select example">
                                                                 </select>
                                                                 <label for="floatingSelectGrid">Ürün Statüsü Seçiniz</label>
                                                             </div>
@@ -147,11 +150,43 @@
                 `)
                         fillOrderProductStatus(item.id, item.orderProductTypeId);
                         getProductRemainingStock(item.productNo);
+                    
+                    
+
+
+
+
+
+
+
+
+
                     }
                     
                 }
 
             })
+        }
+
+        function a(itemId){
+
+            $("#orderProduct-" + itemId).change(function () {
+
+                $.ajax({
+                    type: "post",
+                    url: "/Order/ChangeOrderProductType/",
+                    data: {
+                        orderId: @Model.Id,
+                        orderProductTypeId: $(`#orderProduct-` + itemId).val(),
+                        productId: itemId
+                    },
+                    success: function (res) {
+                        toastr.success(res.message);
+                    }
+                })
+            })
+
+          
         }
 
         function fillOrderStatus() {
@@ -184,9 +219,9 @@
 
                 url:"/Order/GetOrderProductStatus",
                 success: function (res) {
-                    $(`#OrderProduct-` + productId).empty();
+                    $(`#orderProduct-`+productId).empty();
                     for (var item of res) {
-                        $("#OrderProduct-" + productId).append(new Option(item.name, item.id, false, item.id == typeId));
+                        $("#orderProduct-" + productId).append(new Option(item.name, item.id, false, item.id == typeId));
                     }
                 }
             })

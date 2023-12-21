@@ -30,6 +30,14 @@ namespace Ide.Web.Controllers
             return Ok(new { result = true, message = message });
 
         }
+
+        [HttpPost]
+        public IActionResult ChangeOrderProductType(int orderId, int orderProductTypeId,int productId)
+        {
+            orderProductTypeService.ChangeOrderProductType(orderId, orderProductTypeId, productId);
+
+            return Ok(new { result = true, message = "Ürün Stasüsü Değişti !" });
+        }
         [HttpPost]
         public IActionResult ChangeOrderType(int orderId,int orderTypeId)
         {
