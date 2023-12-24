@@ -14,7 +14,9 @@ namespace Ide.Business.Abstract
         public void ProductUpdate(Product product);
         public Product ProductGetById(int productId);
         IQueryable GetAllCustomer();
-        Task NewProduct(Product product,string picture);
+        Task NewProduct(Product product);
+        Task AddProductPicture(int productId,string picture);
+
         public void Delete(int productId);
         public int GetProductRemainingStock(string productNo);
     }

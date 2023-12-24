@@ -11,5 +11,6 @@ namespace Ide.Business.Abstract
         IQueryable GetAll(string mail);
         public void ProductDown(string mail, int id);
         bool ProductAdd(string mail, int id);
+        bool BasketNull(string mail);
     }
 }

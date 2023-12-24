@@ -49,11 +49,11 @@ namespace Ide.Web.Controllers
             return Json(new { data = productService.GetAllCustomer() });
         }
         [HttpPost]
-        public async Task <IActionResult> NewProduct(Product product,string picture)
+        public async Task <IActionResult> NewProduct(Product product)
         {
           
             try {
-               await productService.NewProduct(product,picture);
+               await productService.NewProduct(product);
             
             }
             catch(Exception ex)
@@ -61,6 +61,23 @@ namespace Ide.Web.Controllers
                 return BadRequest(new { result = false, message = "ürün eklenirken hata oluştu! " + ex.Message });
             }
             return Ok(new { result = true, message = "Ürün eklendi !" });
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddPicture(int productId, string picture)
+        {
+
+            try
+            {
+                await productService.AddProductPicture(productId, picture);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { result = false, message = "ürün resmi eklenirken hata oluştu! " + ex.Message });
+            }
+            return Ok(new { result = true, message = "Ürün resmi güncellendi !" });
 
         }
         [HttpPost]

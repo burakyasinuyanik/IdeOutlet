@@ -29,7 +29,7 @@ namespace Ide.Business.Concrete
 
         public IQueryable GetAll(string mail)
         {
-            return unitOfWork.Orders.GetAll().Include(u=>u.AppUser).Include(u=>u.OrderProducts).ThenInclude(u=>u.OrderProductType).Include(u=>u.OrderType).Where(u=>u.AppUser.Email== mail);
+            return unitOfWork.Orders.GetAll().Include(u=>u.AppUser).Include(u=>u.OrderProducts).ThenInclude(u=>u.OrderProductType).Include(u=>u.OrderType).Where(u=>u.AppUser.Email== mail).OrderByDescending(u=>u.Id);
         }
 
         public IQueryable GetAllFull()
@@ -49,9 +49,9 @@ namespace Ide.Business.Concrete
 
         public Order NewOrder(string mail)
         {
-          ShoppingBasket basket=  unitOfWork.ShoppingBaskets.GetAll().Include(u => u.AppUsers.Where(u => u.Email == mail)).Include(u => u.Products).FirstOrDefault();
+          ShoppingBasket basket=  unitOfWork.ShoppingBaskets.GetAll().Include(u => u.AppUsers).Include(u => u.Products).Where(u=>u.AppUsers.Any(u=>u.Email==mail)).FirstOrDefault();
 
-            if (basket.Products != null)
+            if (basket.Products.Count > 0)
             {
                 Order order = new Order();
                 order.OrderTypeId = unitOfWork.OrderTypes.GetFirstOrDefault(u => u.Name.Contains("bek")).Id;

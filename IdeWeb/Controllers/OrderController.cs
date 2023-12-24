@@ -1,4 +1,5 @@
 ﻿using Ide.Business.Abstract;
+using Ide.Business.Concrete;
 using Ide.Repository.Shared.Abstract;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +11,13 @@ namespace Ide.Web.Controllers
         private readonly IOrderService orderService;
         private readonly IOrderTypeService orderTypeService;
         private readonly IOrderProductTypeService orderProductTypeService;
-        public OrderController(IUnitOfWork unitOfWork, IOrderService orderService, IOrderTypeService orderTypeService, IOrderProductTypeService orderProductTypeService) : base(unitOfWork)
+        private readonly IShopingBasketService shopingBasketService;
+        public OrderController(IUnitOfWork unitOfWork, IOrderService orderService, IOrderTypeService orderTypeService, IOrderProductTypeService orderProductTypeService, IShopingBasketService shopingBasketService) : base(unitOfWork)
         {
             this.orderService = orderService;
             this.orderTypeService = orderTypeService;
             this.orderProductTypeService = orderProductTypeService;
+            this.shopingBasketService = shopingBasketService;
         }
 
         public IActionResult Index()
@@ -24,10 +27,17 @@ namespace Ide.Web.Controllers
         [HttpPost]
         public IActionResult NewOrder(string mail)
         {
-
-            int ıd = orderService.NewOrder(mail).Id;
-            string message= "Sipariş Numarınız : " + ıd;
-            return Ok(new { result = true, message = message });
+           if(shopingBasketService.BasketNull(mail))
+            {
+                int ıd = orderService.NewOrder(mail).Id;
+                string message = "Sipariş Numarınız : " + ıd;
+                return Ok(new { result = true, message = message });
+            }
+            else
+            {
+                return Ok(new {result=false,message="sipariş oluşmadı"});
+            }
+           
 
         }
 

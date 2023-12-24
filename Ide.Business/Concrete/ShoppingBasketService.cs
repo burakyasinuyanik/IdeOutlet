@@ -22,6 +22,20 @@ namespace Ide.Business.Concrete
         {
             this.unitOfWork = unitOfWork;
         }
+
+        public bool BasketNull(string mail)
+        {
+           ShoppingBasket shoppingBasket= unitOfWork.ShoppingBaskets.GetAll().Include(u => u.AppUsers.Where(u => u.Email == mail)).Include(u => u.Products).FirstOrDefault();
+            if (shoppingBasket.Products.Count ==0)
+            {
+                return false;
+            }
+            else
+            {
+               return true;
+            }
+        }
+
         [HttpGet]
         
      

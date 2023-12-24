@@ -25,7 +25,7 @@
                 <h5 class="modal-title" id="modalTitleId">Ürün</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-target="#modalAddUpdate" aria-label="Close"></button>
             </div>
-            <div id="frmAddUser" class="needs-validation">
+            <form id="frmAddUser" class="needs-validation">
                 <div class="modal-body">
 
                     <div class="container">
@@ -35,9 +35,7 @@
                             <label for="inputName" class="col-4 col-form-label">Fotoğraf</label>
                             <img src="" id="imgProfilePicture" alt="" class="avatar-lg rounded-circle img-thumbnail">
                             <input type="file" name="uploadfile" id="fileProfilePicture" style="display:none;" accept=".jpeg,.jpg,.png" />
-                            <div class="col-8">
-                                <label for="fileProfilePicture"><a class="btn btn-success btn-sm">Seç</a></label>
-                            </div>
+
                         </div>
                         <div class="mb-3 row">
                             <label for="inputName" class="col-4 col-form-label">Ürün Adı</label>
@@ -49,6 +47,12 @@
                             <label for="inputStock" class="col-4 col-form-label">Stok</label>
                             <div class="col-8">
                                 <input type="number" class="form-control input-mask" required id="txtStock" placeholder="Stok">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="inputRemainingStock" class="col-4 col-form-label">Kalan Stok</label>
+                            <div class="col-8">
+                                <input type="number" class="form-control input-mask" required id="txtRemainingStock" placeholder="Kalan Stok">
                             </div>
                         </div>
 
@@ -92,10 +96,45 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-target="#modalAddUpdate">Kapat</button>
                     <button type="submit" id="btnSave" class="btn btn-primary">Ekle</button>
                 </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalPicture" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleId">Ürün</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-target="#modalPicture" aria-label="Close"></button>
+            </div>
+            <div id="frmAddPicture" class="needs-validation">
+                <div class="modal-body">
+
+                    <div class="container">
+
+
+                        <div class="mb-3 row">
+                            <label for="inputName" class="col-4 col-form-label">Fotoğraf</label>
+                            <img src="" id="imgProfilePicture1" alt="" class="avatar-lg rounded-circle img-thumbnail">
+                            <input type="file" name="uploadfile" id="fileProfilePicture1" style="display:none;" accept=".jpeg,.jpg,.png" />
+                            <div class="col-8">
+                                <label for="fileProfilePicture1"><a class="btn btn-success btn-sm">Seç</a></label>
+                            </div>
+
+                       
+                        
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-target="#modalPicture">Kapat</button>
+                    <button type="submit" id="btnSave1" class="btn btn-primary">Ekle</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 
 @section Scripts{
     <script>
@@ -126,9 +165,10 @@
             $("#imgProfilePicture").attr('src', "");
             $("#modalAddUpdate").modal("show");
             $("#frmAddUser").removeClass("was-validated");
+
             $('#frmAddUser').parsley().reset();
 
-            $("#imgProfilePicture").attr('src', "");
+          
 
             $("#btnSave").off().text('Ekle').removeClass('btn-success').addClass('btn-primary').click(function () {
 
@@ -149,16 +189,14 @@
                         isActive: $('#productIsActive').is(":checked")
                     };
 
-                    var instantUp = $("#fileProfilePicture").prop('files')[0];
-                    var readerIns = new FileReader();
-                    readerIns.readAsDataURL(instantUp);
+                  
 
-                    readerIns.onload = function () {
+               
                         $.ajax({
                             type: "Post",
                             url: "/Product/NewProduct/",
                             data: {
-                                picture: readerIns.result,
+                               
                                 product:product
                             },
                            
@@ -181,7 +219,7 @@
 
                    
 
-                    }
+                    
 
             })
 
@@ -198,14 +236,15 @@
                    
                     { data: "name", title: "Ürün Adı" },
                     { data: "stock", title: "Stok" },
-
+                    {data:"remainingStock", title:"Kalan Stok"},
                     { data: "price", title: "Fiyat" },
                     { data: "barcode", title: "Barkod" },
                     { data: "productNo", title: "Ürün No" },
                     { data: "isActive",title:"ürün aktif mi?" },
                     {
                         data: "id", title: "İşlemler", render: function (data) {
-                            return `  <a title="Kullanıcıyı Sil" href="#" class="px-1 text-danger" style = "opacity:60%" onclick="deleteProduct(${data})" > <i class="uil uil-trash-alt font-size-24" > </i></a > <a href="#" class="px-1 text-primary" title = "Kullanıcı Düzenle" style="opacity: 60%;" onclick="updateProduct(${data})" > <i class="uil uil-edit font-size-24" > </i></a>  `;
+                            return ` <a title="Görsel Ekle" href="#" class="px-1 text-info" style = "opacity:60%" onclick="addPicture(${data})" ><i class="dripicons-camera font-size-24"></i></a >
+                            <a title="Kullanıcıyı Sil" href="#" class="px-1 text-danger" style = "opacity:60%" onclick="deleteProduct(${data})" > <i class="uil uil-trash-alt font-size-24" > </i></a > <a href="#" class="px-1 text-primary" title = "Kullanıcı Düzenle" style="opacity: 60%;" onclick="updateProduct(${data})" > <i class="uil uil-edit font-size-24" > </i></a>  `;
 
                         }
                     }
@@ -216,6 +255,69 @@
                     searchPlaceholder: "Ara"
                 },
             })
+        }
+
+        function addPicture(productId) {
+
+            $("input").val("");
+
+           
+            $("#modalPicture").modal("show");
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Product/ProductGetById/',
+                    data: { productId: productId },
+                    success: function (res) {
+                        $("#imgProfilePicture1").attr('src', `/images/product/${res.picture}`);
+                    }
+
+                });
+
+                $("#fileProfilePicture1").on('change', function () {
+                    var instantUp = $("#fileProfilePicture1").prop('files')[0];
+                    var readerIns = new FileReader();
+                    readerIns.readAsDataURL(instantUp);
+                    readerIns.onload = function () {
+                        //$("#displayDiv").show();
+                        $("#imgProfilePicture1").attr('src', readerIns.result);
+
+
+                    }
+                });
+
+                $("#btnSave1").off().text('Ekle').removeClass('btn-success').addClass('btn-primary').click(function () {
+                    var instantUp = $("#fileProfilePicture1").prop('files')[0];
+                    var readerIns = new FileReader();
+                    readerIns.readAsDataURL(instantUp);
+
+                    readerIns.onload = function () {
+                        $.ajax({
+                            type: "Post",
+                            url: "/Product/AddPicture/",
+                            data: {
+                                picture: readerIns.result,
+                                productId: productId
+                            },
+
+
+                            success: function (res) {
+                                $("#modalPicture").modal('hide');
+
+                                toastr.success(res.message);
+                                $('#tblProduct').DataTable().ajax.reload();
+
+                            },
+                            error: function (res) {
+
+                                toastr.error("HATA", res.responseText);
+
+                            }
+                        })
+                        }
+                })
+                
+
         }
 
         function deleteProduct(productId) {
@@ -256,7 +358,7 @@
                     $("#txtName").val(res.name);
                     $("#txtStock").val(res.stock);
                     $("#imgProfilePicture").attr('src', `/images/product/${res.picture}`);
-
+                    $("#txtRemainingStock").val(res.remainingStock);
                     $("#txtPrice").val(res.price);
                     $("#txtBarcode").val(res.barcode);
                     $("#txtProductNo").val(res.productNo);
@@ -288,6 +390,8 @@
                     formData.append("id", productId);
                     formData.append("name", $("#txtName").val());
                     formData.append("stock", $("#txtStock").val());
+                    formData.append("remainingStock", $("#txtRemainingStock").val());
+
                     formData.append("price", $("#txtPrice").val());
                     formData.append("barcode", $("#txtBarcode").val());
                     formData.append("productNo", $("#txtProductNo").val());

@@ -107,23 +107,37 @@
                         },
                         success: function (res) {
 
-                            Swal.fire({
-                                title: " Sipariş Oluşturuldu!",
-                                text: res.message,
-                                icon: "success",
-                                confirmButtonText: "Tamam"
+                            if(res.result){
+                                Swal.fire({
+                                    title: " Sipariş Oluşturuldu!",
+                                    text: res.message,
+                                    icon: "success",
+                                    confirmButtonText: "Tamam"
 
-                            });
-                            $("#shoppingBasket").empty();
-                            $("#total").text("0");
-                            $("#totalProduct").text("0");
-                            $("#shoppingBasket").append(`
-                                            <div class="card border shadow-none" >
-                                                        <div class="card-body" >
-                                                                <h5 class="font-size-16 mb-1" > <a href="" class="text-reset " > </a>Sepetinizde ürün bulunmamaktadır</h5 >
-                                                                </div>
-                                                                </div>
-                                                                    `)
+                                });
+                                $("#shoppingBasket").empty();
+                                $("#total").text("0");
+                                $("#totalProduct").text("0");
+                                $("#shoppingBasket").append(`
+                                                    <div class="card border shadow-none" >
+                                                                <div class="card-body" >
+                                                                        <h5 class="font-size-16 mb-1" > <a href="" class="text-reset " > </a>Sepetinizde ürün bulunmamaktadır</h5 >
+                                                                        </div>
+                                                                        </div>
+                                                                            `)
+
+                            }else{
+
+                                Swal.fire({
+                                    title: " Sepetiniz Boş!",
+                                    text: res.message,
+                                    icon: "error",
+                                    confirmButtonText: "Tamam"
+
+                                });
+                            }
+
+                            
                         }
 
                     });
