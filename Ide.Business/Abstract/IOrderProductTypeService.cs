@@ -10,5 +10,6 @@ namespace Ide.Business.Abstract
     {
         IQueryable GetOrderProductStatus();
         public void ChangeOrderProductType(int orderId, int orderProductTypeId, int productId);
+
     }
 }

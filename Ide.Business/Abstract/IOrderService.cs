@@ -15,6 +15,7 @@ namespace Ide.Business.Abstract
         public Order GetOrderDetail(int orderId);
         public Order GetOrderPage(int orderId);
         public void ChangeOrderType(int orderId, int orderTypeId);
-
+        public double ConsentOrderProductPrice(int orderId);
+        public double AnnulmentOrderProductPrice(int orderId);
     }
 }

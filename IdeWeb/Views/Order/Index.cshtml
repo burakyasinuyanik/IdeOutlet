@@ -6,12 +6,33 @@
 
 
 @section Scripts{
+    <script src="~/assets/js/pages/jquery.lazyload.js"></script>
     <script>
+
+        $(function () {
+            $("img.lazy").lazyload({
+                effect: "fadeIn"
+            });
+        });
+  
 
         $(document).ready(function(){
             fillOrder();
-
+          
         });
+
+        function consentOrderProductPrice(orderId) {
+            $.ajax({
+                type: "post",
+                url: "/Order/ConsentOrderProductPrice/",
+                data: {
+                    orderId: orderId,
+                },
+                success: function (res) {
+                    $("#consentOrderProductPrice-" + orderId).text(res);
+                }
+            })
+        }
 
         function fillOrder(){
             $.ajax({
@@ -46,7 +67,7 @@
                                 <i class="uil uil-truck text-primary h2"></i>
                             </div>
                             <div class="flex-grow-1 overflow-hidden">
-                                        <h5 class="font-size-16 mb-1">${item.id} numaralı sipariş bilgileriniz.  <div class="badge bg-pill bg-success-subtle text-success font-size-12">${item.orderType.name}</div></h5>
+                                        <h5 class="font-size-16 mb-1">${item.id} numaralı sipariş bilgileriniz.  <div class="badge bg-pill bg-success-subtle text-info font-size-12">${item.orderType.name}</div></h5>
                                        
                                 <p class="text-muted text-truncate mb-0">Detaylı bilgi için tıklayınız</p>
                             </div>
@@ -60,7 +81,10 @@
 
                         <div id="checkout-shippinginfo-collapse-${item.id}" class="collapse" style="">
                     <div class="p-4 border-top">
-                        <h5 class="font-size-14 mb-3">Sipariş Detayı</h5>
+                       
+                                <h5 class="font-size-14 mb-3">Sipariş Toplamı: <span>${item.totalAmount}</span <span> TL</span></h5>
+                                                                <h5 class="badge bg-pill bg-success-subtle text-success font-size-12">Onaylanan Ödenecek Tutar: <span id="consentOrderProductPrice-${item.id}"></span <span> TL</span></h5>
+
                         <div class="row" id="orderProductRow-${item.id}">
                             
                         
@@ -71,7 +95,7 @@
             </div>
                             
                             `)
-
+                            consentOrderProductPrice(item.id);
                             for (var item2 of item.orderProducts) {
                                 $(`#orderProductRow-${item.id}`).append(`
                                                         <div class="col-lg-4 col-sm-6">
@@ -84,7 +108,7 @@
 
                                             <h5 class="font-size-14">${item2.name}</h5>
                                                      <a href="#" class="float-end ms-1" data-bs-toggle="tooltip" data-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-                                <img src="images/product/${item2.picture}" alt="" class="avatar-xs rounded-circle me-2">
+                                                                                                <img src="images/product/${item2.picture}"   data-original="" alt="" class="avatar-xs rounded-circle me-2 lazy">
 
 
                     </a>

@@ -40,7 +40,19 @@ namespace Ide.Web.Controllers
            
 
         }
+        [HttpPost]
+        public IActionResult ConsentOrderProductPrice(int orderId)
+        {
+            
+            return Json(orderService.ConsentOrderProductPrice(orderId));
+        }
 
+        [HttpPost]
+        public IActionResult AnnulmentOrderProductPrice(int orderId)
+        {
+            
+            return Json(orderService.AnnulmentOrderProductPrice(orderId));
+        }
         [HttpPost]
         public IActionResult ChangeOrderProductType(int orderId, int orderProductTypeId,int productId)
         {

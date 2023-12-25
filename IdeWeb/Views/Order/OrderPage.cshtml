@@ -60,7 +60,8 @@
                     <h5 class="font-size-14 m-0">Onaylanan Ürün Fiyatı Toplamı :</h5>
                 </td>
                 <td>
-                    $ 25
+                    <span id="consentOrderProductPrice"></span>
+                     TL
                 </td>
             </tr>
             <tr>
@@ -68,7 +69,7 @@
                     <h5 class="font-size-14 m-0">İptal Edilen Ürün Fiyat Toplamı :</h5>
                 </td>
                 <td>
-                    $ 18.20
+                    <span id="annulmentOrderProductPrice"></span> TL
                 </td>
             </tr>
 
@@ -77,7 +78,7 @@
                     <h5 class="font-size-14 m-0"><b>Müşterinin Ödeyecek Olduğu Fiyat :</b></></h5>
                 </td>
                 <td>
-                    <b> $ 745.2</b>
+                    <b> <span id="consentOrderProductPrice2"></span> TL</b>
                 </td>
             </tr>
             </table>
@@ -92,6 +93,8 @@
         $(document).ready(function () {
             fillOrderStatus();
             fillOrderProduct();
+            consentOrderProductPrice();
+            annulmentOrderProductPrice();
 
                             $("#orderStatus").change(function () {
 
@@ -182,8 +185,8 @@
                     },
                     success: function (res) {
                         toastr.success(res.message);
-
-                       
+                        consentOrderProductPrice();
+                        annulmentOrderProductPrice();
                     }
                 })
             })
@@ -229,6 +232,33 @@
                 }
             })
         }
+        function consentOrderProductPrice()
+        {
+            $.ajax({
+                type:"post",
+                url: "/Order/ConsentOrderProductPrice/",
+                data:{
+                    orderId:@Model.Id,
+                },
+                success:function(res){
+                    $("#consentOrderProductPrice").text(res);
+                    $("#consentOrderProductPrice2").text(res);
 
+                }
+            })
+        }
+        function annulmentOrderProductPrice() {
+            $.ajax({
+                type: "post",
+                url: "/Order/AnnulmentOrderProductPrice/",
+                data: {
+                    orderId: @Model.Id,
+                },
+                success: function (res) {
+                    $("#annulmentOrderProductPrice").text(res);
+                }
+            })
+        }
+        
     </script>
 }

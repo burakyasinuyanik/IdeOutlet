@@ -25,7 +25,7 @@ namespace Ide.Business.Concrete
 
         public bool BasketNull(string mail)
         {
-           ShoppingBasket shoppingBasket= unitOfWork.ShoppingBaskets.GetAll().Include(u => u.AppUsers.Where(u => u.Email == mail)).Include(u => u.Products).FirstOrDefault();
+           ShoppingBasket shoppingBasket= unitOfWork.ShoppingBaskets.GetAll(u=>u.AppUsers.Any(a=>a.Email==mail)).Include(u => u.Products).FirstOrDefault();
             if (shoppingBasket.Products.Count ==0)
             {
                 return false;

@@ -19,6 +19,18 @@ namespace Ide.Business.Concrete
             this.unitOfWork = unitOfWork;
         }
 
+        public double AnnulmentOrderProductPrice(int orderId)
+        {
+            Order order = unitOfWork.Orders.GetAll(u => u.Id == orderId).Include(u => u.OrderProducts).FirstOrDefault();
+            double annulmentPrice = 0;
+            foreach (OrderProduct item in order.OrderProducts)
+            {
+                if (item.OrderProductTypeId == unitOfWork.OrderProductTypes.GetAll(u => u.Name.Contains("iptal")).FirstOrDefault().Id)
+                    annulmentPrice += item.Price;
+            }
+            return annulmentPrice;
+        }
+
         public void ChangeOrderType(int orderId, int orderTypeId)
         {
             Order order = unitOfWork.Orders.GetById(orderId);
@@ -27,9 +39,21 @@ namespace Ide.Business.Concrete
             unitOfWork.Save();
         }
 
+        public double ConsentOrderProductPrice(int orderId)
+        {
+            Order order = unitOfWork.Orders.GetAll(u => u.Id == orderId).Include(u => u.OrderProducts).FirstOrDefault();
+            double consentPrice = 0;
+            foreach(OrderProduct item in order.OrderProducts)
+            {
+                if(item.OrderProductTypeId==unitOfWork.OrderProductTypes.GetAll(u=>u.Name.Contains("ona")).FirstOrDefault().Id)
+                consentPrice += item.Price;
+            }
+            return consentPrice;
+        }
+
         public IQueryable GetAll(string mail)
         {
-            return unitOfWork.Orders.GetAll().Include(u=>u.AppUser).Include(u=>u.OrderProducts).ThenInclude(u=>u.OrderProductType).Include(u=>u.OrderType).Where(u=>u.AppUser.Email== mail).OrderByDescending(u=>u.Id);
+            return unitOfWork.Orders.GetAll(u => u.AppUser.Email == mail).Include(u=>u.OrderProducts).ThenInclude(u=>u.OrderProductType).Include(u=>u.OrderType).OrderByDescending(u=>u.Id);
         }
 
         public IQueryable GetAllFull()
