@@ -141,7 +141,7 @@
                                                         <td>${item.price}<span> TL</span></td>
                                                         <td>
                                                                                             <div class="form-floating mb-3"  >
-                                                                        <select class="form-select productSelect" id="orderProduct-${item.id}" onclick="a(${item.id})" aria-label="Floating label select example">
+                                                                                <select class="form-select productSelect" id="orderProduct-${item.id}" onclick="a(${item.id},${item.productNo})" aria-label="Floating label select example">
                                                                 </select>
                                                                 <label for="floatingSelectGrid">Ürün Statüsü Seçiniz</label>
                                                             </div>
@@ -171,7 +171,7 @@
             })
         }
 
-        function a(itemId){
+        function a(itemId,productNo) {
 
             $("#orderProduct-" + itemId).change(function (e) {
 
@@ -181,12 +181,14 @@
                     data: {
                         orderId: @Model.Id,
                         orderProductTypeId: $(`#orderProduct-` + itemId).val(),
-                        productId: itemId
+                        productId: itemId,
+                        productNo: productNo
                     },
                     success: function (res) {
                         toastr.success(res.message);
                         consentOrderProductPrice();
                         annulmentOrderProductPrice();
+                        getProductRemainingStock(productNo);
                     }
                 })
             })

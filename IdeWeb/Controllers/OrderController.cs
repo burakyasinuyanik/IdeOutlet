@@ -54,9 +54,9 @@ namespace Ide.Web.Controllers
             return Json(orderService.AnnulmentOrderProductPrice(orderId));
         }
         [HttpPost]
-        public IActionResult ChangeOrderProductType(int orderId, int orderProductTypeId,int productId)
+        public IActionResult ChangeOrderProductType(int orderId, int orderProductTypeId,int productId,string productNo)
         {
-            orderProductTypeService.ChangeOrderProductType(orderId, orderProductTypeId, productId);
+            orderProductTypeService.ChangeOrderProductType(orderId, orderProductTypeId, productId, productNo);
 
             return Ok(new { result = true, message = "Ürün Stasüsü Değişti !" });
         }
