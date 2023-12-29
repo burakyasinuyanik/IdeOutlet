@@ -29,6 +29,20 @@
 
 <body>
 
+    <div id="loading" style="position: absolute;
+                         top: 0;
+                         left: 0;
+                         width: 100%;
+                         height: 100%;
+                         z-index: 9999;
+                         display: flex;
+                         justify-content: center;
+                         align-items: center;
+                        background-color:#80808091
+                     ">
+        <div ><img src="~/assets/images/loading.gif" style="width:250px" /></div>
+    </div>
+
     <!-- <body data-layout="horizontal" data-topbar="colored"> -->
     <!-- Begin page -->
     <div id="layout-wrapper">
@@ -269,6 +283,18 @@
     <!-- App js -->
    
     <partial name="_PluginsPartial.cshtml" />
+
+    <script>
+        $(document).on({
+            ajaxStart: function () {
+                $('#loading').show();
+            },
+            ajaxStop: function () {
+                $('#loading').hide();
+            }
+        });
+
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 
