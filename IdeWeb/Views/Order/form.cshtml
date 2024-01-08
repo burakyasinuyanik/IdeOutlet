@@ -1,0 +1,95 @@
+﻿
+<div class="card">
+    <a href="#checkout-shippinginfo-collapse-36" class="text-reset collapsed" data-bs-toggle="collapse" aria-expanded="false">
+        <div class="p-4">
+
+            <div class="d-flex align-items-center">
+                <div class="flex-shrink-0 me-3">
+                    <i class="uil-file-bookmark-alt text-primary h2"></i>
+                </div>
+                <div class="flex-grow-1 overflow-hidden">
+                    <h5 class="font-size-16 mb-1">Aşağıdakilerden Hangisi aşağıdadır?  <div class="badge bg-pill bg-success-subtle text-info font-size-12"></div></h5>
+
+                    <p class="text-muted text-truncate mb-0">Cevap Seçmek İçin Tıklayınız.</p>
+                </div>
+                
+            </div>
+
+        </div>
+    </a>
+
+    <div id="checkout-shippinginfo-collapse-36" class="collapse show" style="">
+        <div class="p-4 border-top">
+
+           
+            <div class="row" id="orderProductRow-36">
+
+
+                <div class="col-xl-6">
+                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked="">
+                        <label class="btn btn-danger  btn-rounded" for="btnradio1"><i class="uil uil-exclamation-octagon me-2"></i>Hiç Memnun Değilim</label>
+
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                        <label class="btn btn-soft-danger btn-danger btn-rounded" for="btnradio2"><i class="uil uil-exclamation-triangle me-2"></i>Memnun Değilim</label>
+
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                        <label class="btn btn-warning btn-rounded" for="btnradio3"><i class="uil-map-marker-question"></i>Kararsız</label>
+
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off" checked="">
+                        <label class="btn btn-soft-success btn-success btn-rounded" for="btnradio4"><i class="uil-map-marker-plus"></i>Memnun</label>
+
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio5" autocomplete="off">
+                        <label class="btn btn-success btn-rounded" for="btnradio5"><i class="uil-thumbs-up"></i> Çok Memnun</label>
+
+                      
+                    </div>
+                    <div class="col" id="text">
+                        
+                    </div>
+                </div>
+
+
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+
+        $("#btnradio1").click(function(){
+            $("#text").empty();
+            $("#text").append(`     <div class="position-relative">
+                                            <input type="text" class="form-control chat-input rounded" placeholder="Lütfen Açıklama Giriniz...">
+
+                                </div>`)
+        })
+        $("#btnradio2").click(function () {
+            $("#text").empty();
+            $("#text").append(`     <div class="position-relative">
+                                            <input type="text" class="form-control chat-input rounded" placeholder="Lütfen Açıklama Giriniz...">
+
+                                        </div>`)
+        })
+        $("#btnradio3").click(function () {
+            $("#text").empty();
+            
+        })
+        $("#btnradio4").click(function () {
+            $("#text").empty();
+
+        })
+        $("#btnradio5").click(function () {
+            $("#text").empty();
+
+        })
+       
+        $(document).ready(function () {
+         
+
+        })
+    </script>
+}

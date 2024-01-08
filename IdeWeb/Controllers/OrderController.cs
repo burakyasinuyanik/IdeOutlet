@@ -24,6 +24,11 @@ namespace Ide.Web.Controllers
         {
             return View();
         }
+
+        public IActionResult Form()
+        {
+            return View();
+        }
         [HttpPost]
         public IActionResult NewOrder(string mail)
         {

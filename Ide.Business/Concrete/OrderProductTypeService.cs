@@ -58,6 +58,7 @@ namespace Ide.Business.Concrete
 
                 }
             }
+            order.OrderProducts.FirstOrDefault(u => u.Id == productId).DateModified = DateTime.Now;
             unitOfWork.OrderProducts.Update(order.OrderProducts.FirstOrDefault(u => u.Id == productId));
             unitOfWork.Save();
         }

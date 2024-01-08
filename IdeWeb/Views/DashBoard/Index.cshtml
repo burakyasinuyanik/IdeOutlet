@@ -1,0 +1,511 @@
+﻿
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card">
+            <div class="card-body" style="position: relative;">
+                <h4 class="card-title mb-4"><b>Toplam Müşteri</b></h4>
+                <div id="totalCustomer">
+                </div>
+            </div>
+        </div><!--end card-->
+    </div>
+    <div class="col-xl-3">
+        <div class="card">
+            <div class="card-body" style="position: relative;">
+                <h4 class="card-title mb-4"><b> </b></h4>
+                <div id="productCase">
+                </div>
+            </div>
+        </div><!--end card-->
+    </div>
+    <div class="col-xl-3">
+        <div class="card">
+            <div class="card-body" style="position: relative;">
+                <h4 class="card-title mb-4"><b> </b></h4>
+                <div id="totalConfirmationOrderProduct">
+                </div>
+            </div>
+        </div><!--end card-->
+    </div>
+    <div class="col-xl-6">
+        <div class="card">
+            <div class="card-body" style="position: relative;">
+                <h4 class="card-title mb-4"></h4>
+                <div id="orderCase">
+                </div>
+            </div>
+        </div><!--end card-->
+    </div>
+                            <div class="col-xl-6">
+                                <div class="card">
+                                    <div class="card-body" style="position: relative;">
+                                        <h4 class="card-title mb-4"></h4>
+                <div id="orderProductCase">
+                </div>
+                                    </div>
+                                </div><!--end card-->
+                            </div>
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body" style="position: relative;">
+                <h4 class="card-title mb-4"></h4>
+                <div id="order">
+                </div>
+            </div>
+        </div><!--end card-->
+    </div>
+                        
+                        </div>
+
+
+
+@section Scripts{
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+
+        $(document).ready(function(){
+
+            totalOderChar();
+            orderCaseAjax();
+            totalCustomerAjax();
+            orderProductCaseAjax();
+            productCaseAjax();
+           
+            confirmationOrderProductCaseAjax();
+        });
+        function totalOderChar(){
+            $.ajax({
+                type: "get",
+                url: "/DashBoard/TotalOrder",
+                success: function (res) {
+                    orderChart(res);
+                }
+            })
+        }
+        function orderCaseAjax(){
+            $.ajax({
+                type:"get",
+                url: "/DashBoard/OrderCase",
+                success:function(res){
+                    orderCase(res);
+                }
+            })
+        }
+        function orderProductCaseAjax() {
+            $.ajax({
+                type: "get",
+                url: "/DashBoard/OrderProductCase",
+                success: function (res) {
+                    orderProductCase(res);
+                }
+            })
+        }
+        function totalCustomerAjax(){
+            $.ajax({
+                type:"get",
+                url:"DashBoard/TotalCustomer",
+                success:function(res){
+                    totalCustomer(res);
+                }
+            })
+        }
+        function productCaseAjax(){
+            $.ajax({
+                type:"get",
+                url: "/DashBoard/ProductCase",
+                success:function(res){
+                    productCase(res);
+                }
+            })
+        }
+        function confirmationOrderProductCaseAjax() {
+            $.ajax({
+                type: "get",
+                url: "/DashBoard/ConfirmationOrderProductCase",
+                success: function (res) {
+                    totalConfirmationOrderProduct(res);
+                }
+            })
+        }
+        function productCase(res){
+            var options = {
+                chart: {
+                    type: 'radialBar',
+                    height: 160,
+                    zoom: {
+                        enabled: false
+                    },
+                    offsetY: 20
+                },
+                colors: ['#E91E63'],
+                plotOptions: {
+                    radialBar: {
+                        dataLabels: {
+                            name: {
+                                show: false
+                            },
+                            value: {
+                                offsetY: 0
+                            }
+                        }
+                    }
+                },
+                series: [res.percentRemainingStock],
+                theme: {
+                    monochrome: {
+                        enabled: false
+                    }
+                },
+                legend: {
+                    show: false
+                },
+                title: {
+                    text: 'Kalan Ürün',
+                    align: 'center'
+                }
+            }
+
+            var chart = new ApexCharts(document.querySelector('#productCase'), options);
+            chart.render();
+
+        }
+
+        function totalConfirmationOrderProduct(res){
+         
+
+          
+            var options = {
+                chart: {
+                    id: 'sparkline1',
+                    group: 'sparklines',
+                    type: 'area',
+                    height: 160,
+                    sparkline: {
+                        enabled: true
+                    },
+                },
+                stroke: {
+                    curve: 'straight'
+                },
+                fill: {
+                    opacity: 1,
+                },
+                series: [{
+                    name: 'Sales',
+                    data: ["1"]
+                }],
+                labels: ["1"],
+                yaxis: {
+                    min: 0
+                },
+                xaxis: {
+                    type: 'datetime',
+                },
+                colors: ['#DCE6EC'],
+                title: {
+                    text: res.totalPrice,
+                    offsetX: 30,
+                    style: {
+                        fontSize: '24px',
+                        cssClass: 'apexcharts-yaxis-title'
+                    }
+                },
+                subtitle: {
+                    text: 'Onaylanan Ürün Fiyatı',
+                    offsetX: 30,
+                   
+                }
+            }
+
+            var chart = new ApexCharts(document.querySelector("#totalConfirmationOrderProduct"), options);
+            chart.render();
+
+        }
+        function totalCustomer(res){
+            let customerTotal=0;
+            let date = [];
+            for(var item of res){
+                customerTotal += item.customerCount;
+                var a = item.customerCount;
+                date.push(a);
+            }
+            var options = {
+                chart: {
+                    id: 'sparkline1',
+
+                    type: 'line',
+                    height: 140,
+                    sparkline: {
+                        enabled: true
+                    },
+                    group: 'sparklines'
+                },
+                series: [{
+                    name: 'purple',
+                    data: date
+                }],
+                stroke: {
+                    curve: 'smooth'
+                },
+                markers: {
+                    size: 0
+                },
+                tooltip: {
+                    fixed: {
+                        enabled: true,
+                        position: 'right'
+                    },
+                    x: {
+                        show: false
+                    }
+                },
+                title: {
+                    text: customerTotal,
+                    style: {
+                        fontSize: '26px'
+                    }
+                },
+                colors: ['#734CEA']
+            }
+            var chart = new ApexCharts(document.querySelector("#totalCustomer"), options);
+            chart.render();
+
+        }
+
+        function orderProductCase(res) {
+            let orderProductTypeName = [];
+            let orderProductTypeCount = [];
+            res.map(function (item) {
+                orderProductTypeName.push(item.orderProductTypeName),
+                    orderProductTypeCount.push(item.orderProductTypeCount)
+            })
+
+            var options = {
+                series: orderProductTypeCount,
+                chart: {
+                    width: 350,
+                    type: 'donut',
+                    dropShadow: {
+                        enabled: true,
+                        color: '#111',
+                        top: -1,
+                        left: 3,
+                        blur: 3,
+                        opacity: 0.2
+                    }
+                },
+                stroke: {
+                    width: 0,
+                },
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            labels: {
+                                show: true,
+
+                                total: {
+
+                                    showAlways: false,
+                                    show: true
+                                }
+                            }
+
+                        }
+                    }
+                },
+                labels: orderProductTypeName,
+                dataLabels: {
+                    dropShadow: {
+                        blur: 3,
+                        opacity: 0.8
+                    }
+                },
+                fill: {
+                    type: 'pattern',
+                    opacity: 1,
+                    pattern: {
+                        enabled: true,
+                        style: ['verticalLines', 'squares', 'horizontalLines', 'circles', 'slantedLines'],
+                    },
+                },
+                states: {
+                    hover: {
+                        filter: 'none'
+                    }
+                },
+                theme: {
+                    palette: 'palette2'
+                },
+                title: {
+                    text: "Tüm Siparişlerin Ürün Durum Bilgisi"
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            };
+
+
+
+            var chart = new ApexCharts(document.querySelector("#orderProductCase"), options);
+            chart.render();
+
+        }
+
+        function orderCase(res){
+            let orderTypeName=[];
+            let orderTypeCount=[];
+            res.map(function(item){
+                orderTypeName.push(item.orderTypeName),
+                orderTypeCount.push(item.orderTypeCount)
+            })
+
+            var options = {
+                series: orderTypeCount,
+                chart: {
+                    width: 450,
+                    type: 'donut',
+                    dropShadow: {
+                        enabled: true,
+                        color: '#111',
+                        top: -1,
+                        left: 3,
+                        blur: 3,
+                        opacity: 0.2
+                    }
+                },
+                stroke: {
+                    width: 0,
+                },
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            labels: {
+                                show: true,
+                               
+                                total: {
+                                   
+                                    showAlways: false,
+                                    show: true
+                                }
+                            }
+
+                        }
+                    }
+                },
+                labels: orderTypeName,
+                dataLabels: {
+                    dropShadow: {
+                        blur: 3,
+                        opacity: 0.8
+                    }
+                },
+                fill: {
+                    type: 'pattern',
+                    opacity: 1,
+                    pattern: {
+                        enabled: true,
+                        style: ['verticalLines', 'squares', 'horizontalLines', 'circles', 'slantedLines'],
+                    },
+                },
+                states: {
+                    hover: {
+                        filter: 'none'
+                    }
+                },
+                theme: {
+                    palette: 'palette2'
+                },
+                title: {
+                    text: "Tüm Siparişlerin Durum Bilgisi"
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            };
+
+            
+
+            var chart = new ApexCharts(document.querySelector("#orderCase"), options);
+            chart.render();
+
+        }
+
+        function orderChart(res){
+            let date=[];
+            res.map(function (item) {
+                var a = `${item.dateCraeted.day}-${item.dateCraeted.month}-${item.dateCraeted.year}`
+
+              
+                date.push(a);
+                
+
+            });
+
+            var options = {
+                series: [{
+                    name: 'Toplam Sipariş Adeti',
+                    type: 'column',
+                    data: res.map(function(item){
+                        return item.orderCount;
+                    })
+                }, {
+                    name: 'Toplam Sipariş Tutarı',
+                    type: 'line',
+                    data: res.map(function(item){
+                        return item.totalAmaunt;
+                    })
+                }],
+                chart: {
+                    height: 350,
+                    type: 'line',
+                },
+                stroke: {
+                    width: [0, 4]
+                },
+                title: {
+                    text: 'Oluşturulan Tüm Sipariş Özeti'
+                },
+                dataLabels: {
+                    enabled: true,
+                    enabledOnSeries: [1]
+                },
+                labels:date,
+                xaxis: {
+                    type: 'string',
+                },
+                yaxis: [{
+                    title: {
+                        text: 'Sipariş Adet',
+                    },
+
+                }, {
+                    opposite: true,
+                    title: {
+                        text: 'Siparişlerin Toplam Tutarları'
+                    }
+                }]
+            };
+
+            var chart = new ApexCharts(document.querySelector("#order"), options);
+            chart.render();
+        }
+
+       
+    </script>
+}

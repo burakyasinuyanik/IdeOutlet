@@ -28,7 +28,7 @@
 
 
 <body>
-
+@*
     <div id="loading" style="position: absolute;
                          top: 0;
                          left: 0;
@@ -41,7 +41,7 @@
                         background-color:#80808091
                      ">
         <div ><img src="~/assets/images/loading.gif" style="width:250px" /></div>
-    </div>
+    </div>*@
 
     <!-- <body data-layout="horizontal" data-topbar="colored"> -->
     <!-- Begin page -->
@@ -172,7 +172,7 @@
                         <li class="menu-title">Menu</li>
 
                         <li>
-                            <a href="index.html">
+                            <a asp-action="Index" asp-controller="DashBoard" >
                                 <i class="uil-home-alt"></i><span class="badge rounded-pill bg-primary float-end">01</span>
                                 <span>Dashboard</span>
                             </a>
@@ -285,14 +285,14 @@
     <partial name="_PluginsPartial.cshtml" />
 
     <script>
-        $(document).on({
-            ajaxStart: function () {
-                $('#loading').show();
-            },
-            ajaxStop: function () {
-                $('#loading').hide();
-            }
-        });
+        //$(document).on({
+        //    ajaxStart: function () {
+        //        $('#loading').show();
+        //    },
+        //    ajaxStop: function () {
+        //        $('#loading').hide();
+        //    }
+        //});
 
     </script>
 
