@@ -1,6 +1,6 @@
 ﻿
 <div class="row">
-    <div class="col-xl-6">
+    <div class="col-xl-3">
         <div class="card">
             <div class="card-body" style="position: relative;">
                 <h4 class="card-title mb-4"><b>Toplam Müşteri</b></h4>
@@ -9,15 +9,7 @@
             </div>
         </div><!--end card-->
     </div>
-    <div class="col-xl-3">
-        <div class="card">
-            <div class="card-body" style="position: relative;">
-                <h4 class="card-title mb-4"><b> </b></h4>
-                <div id="productCase">
-                </div>
-            </div>
-        </div><!--end card-->
-    </div>
+
     <div class="col-xl-3">
         <div class="card">
             <div class="card-body" style="position: relative;">
@@ -27,7 +19,34 @@
             </div>
         </div><!--end card-->
     </div>
-    <div class="col-xl-6">
+    <div class="col-xl-3">
+        <div class="card">
+            <div class="card-body" style="position: relative;">
+                <h4 class="card-title mb-4"><b> </b></h4>
+                <div id="totalPendingOrderProduct">
+                </div>
+            </div>
+        </div><!--end card-->
+    </div>
+    <div class="col-xl-3">
+        <div class="card">
+            <div class="card-body" style="position: relative;">
+                <h4 class="card-title mb-4"><b> </b></h4>
+                <div id="totalAnnulmentOrderProduct">
+                </div>
+            </div>
+        </div><!--end card-->
+    </div>
+    <div class="col-xl-4">
+        <div class="card">
+            <div class="card-body" style="position: relative;">
+                <h4 class="card-title mb-4"><b> </b></h4>
+                <div id="productCase">
+                </div>
+            </div>
+        </div><!--end card-->
+    </div>
+    <div class="col-xl-4">
         <div class="card">
             <div class="card-body" style="position: relative;">
                 <h4 class="card-title mb-4"></h4>
@@ -36,7 +55,7 @@
             </div>
         </div><!--end card-->
     </div>
-                            <div class="col-xl-6">
+                            <div class="col-xl-4">
                                 <div class="card">
                                     <div class="card-body" style="position: relative;">
                                         <h4 class="card-title mb-4"></h4>
@@ -72,6 +91,8 @@
             productCaseAjax();
            
             confirmationOrderProductCaseAjax();
+            pendingOrderProductCaseAjax();
+            annulmenOrderProductCaseAjax();
         });
         function totalOderChar(){
             $.ajax({
@@ -127,57 +148,125 @@
                 }
             })
         }
+        function pendingOrderProductCaseAjax() {
+            $.ajax({
+                type: "get",
+                url: "/DashBoard/PendingOrderProductCase",
+                success: function (res) {
+                    totalPendingOrderProduct(res);
+                }
+            })
+        }
+        function annulmenOrderProductCaseAjax() {
+            $.ajax({
+                type: "get",
+                url: "/DashBoard/AnnulmentOrderProductCase",
+                success: function (res) {
+                    totalAnnulmentOrderProduct(res);
+                }
+            })
+        }
         function productCase(res){
             var options = {
+                series: [res.percentRemainingStock],
                 chart: {
+                    height: 255,
                     type: 'radialBar',
-                    height: 160,
-                    zoom: {
-                        enabled: false
-                    },
-                    offsetY: 20
+                    toolbar: {
+                        show: true
+                    }
                 },
-                colors: ['#E91E63'],
                 plotOptions: {
                     radialBar: {
+                        startAngle: -135,
+                        endAngle: 225,
+                        hollow: {
+                            margin: 0,
+                            size: '70%',
+                            background: '#fff',
+                            image: undefined,
+                            imageOffsetX: 0,
+                            imageOffsetY: 0,
+                            position: 'front',
+                            dropShadow: {
+                                enabled: true,
+                                top: 3,
+                                left: 0,
+                                blur: 4,
+                                opacity: 0.24
+                            }
+                        },
+                        track: {
+                            background: '#fff',
+                            strokeWidth: '67%',
+                            margin: 0, // margin is in pixels
+                            dropShadow: {
+                                enabled: true,
+                                top: -3,
+                                left: 0,
+                                blur: 4,
+                                opacity: 0.35
+                            }
+                        },
+
                         dataLabels: {
+                            show: true,
                             name: {
-                                show: false
+                                offsetY: -10,
+                                show: true,
+                                color: '#888',
+                                fontSize: '17px'
                             },
                             value: {
-                                offsetY: 0
+                              
+                                color: '#111',
+                                fontSize: '36px',
+                                show: true,
                             }
                         }
                     }
                 },
-                series: [res.percentRemainingStock],
-                theme: {
-                    monochrome: {
-                        enabled: false
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: 'dark',
+                        type: 'horizontal',
+                        shadeIntensity: 0.5,
+                        gradientToColors: ['#ABE5A1'],
+                        inverseColors: true,
+                        opacityFrom: 1,
+                        opacityTo: 1,
+                        stops: [0, 100]
                     }
                 },
-                legend: {
-                    show: false
+                stroke: {
+                    lineCap: 'round'
                 },
-                title: {
-                    text: 'Kalan Ürün',
-                    align: 'center'
-                }
-            }
+                labels: ['Kalan Ürün'],
+            };
 
+
+            
             var chart = new ApexCharts(document.querySelector('#productCase'), options);
             chart.render();
 
         }
+        function totalAnnulmentOrderProduct(res) {
+            let date = [];
+            let dateSales = [];
+            let totalPrice = 0;
 
-        function totalConfirmationOrderProduct(res){
-         
+            res.map(function (item) {
+                var a = `${item.dateModified.day}-${item.dateModified.month}-${item.dateModified.year}`
+                dateSales.push(item.orderProductPrice);
+                totalPrice += item.orderProductPrice;
+                date.push(a);
+            })
 
-          
             var options = {
                 chart: {
                     id: 'sparkline1',
-                    group: 'sparklines',
+                    
                     type: 'area',
                     height: 160,
                     sparkline: {
@@ -191,19 +280,19 @@
                     opacity: 1,
                 },
                 series: [{
-                    name: 'Sales',
-                    data: ["1"]
+                    name: 'Gün İçinde İptal Edilen Satış',
+                    data: dateSales
                 }],
-                labels: ["1"],
+                labels: date,
                 yaxis: {
                     min: 0
                 },
                 xaxis: {
-                    type: 'datetime',
+                    type: 'string',
                 },
                 colors: ['#DCE6EC'],
                 title: {
-                    text: res.totalPrice,
+                    text: totalPrice + " TL",
                     offsetX: 30,
                     style: {
                         fontSize: '24px',
@@ -211,7 +300,127 @@
                     }
                 },
                 subtitle: {
-                    text: 'Onaylanan Ürün Fiyatı',
+                    text: 'Toplam İptal Statüsündeki Ürün Fiyatı',
+                    offsetX: 30,
+
+                }
+            }
+
+            var chart = new ApexCharts(document.querySelector("#totalAnnulmentOrderProduct"), options);
+            chart.render();
+
+        }
+
+        function totalPendingOrderProduct(res) {
+            let date = [];
+            let dateSales = [];
+            let totalPrice = 0;
+           
+            res.map(function (item) {
+                var a = `${item.dateModified.day}-${item.dateModified.month}-${item.dateModified.year}`
+                dateSales.push(item.orderProductPrice);
+                totalPrice += item.orderProductPrice;
+                date.push(a);
+            })
+
+            var options = {
+                chart: {
+                    id: 'sparkline1',
+                   
+                    type: 'area',
+                    height: 160,
+                    sparkline: {
+                        enabled: true
+                    },
+                },
+                stroke: {
+                    curve: 'straight'
+                },
+                fill: {
+                    opacity: 1,
+                },
+                series: [{
+                    name: 'Gün İçinde Bekleyen Satış',
+                    data: dateSales
+                }],
+                labels: date,
+                yaxis: {
+                    min: 0
+                },
+                xaxis: {
+                    type: 'string',
+                },
+                colors: ['#DCE6EC'],
+                title: {
+                    text: totalPrice + " TL",
+                    offsetX: 30,
+                    style: {
+                        fontSize: '24px',
+                        cssClass: 'apexcharts-yaxis-title'
+                    }
+                },
+                subtitle: {
+                    text: 'Toplam Bekleyen Statüsündeki Ürün Fiyatı',
+                    offsetX: 30,
+
+                }
+            }
+
+            var chart = new ApexCharts(document.querySelector("#totalPendingOrderProduct"), options);
+            chart.render();
+
+        }
+
+        function totalConfirmationOrderProduct(res){
+                let date=[];
+                let dateSales=[];
+                let totalPrice=0;
+
+                res.map(function(item){
+                var a = `${item.dateModified.day}-${item.dateModified.month}-${item.dateModified.year}`
+                dateSales.push(item.orderProductPrice);
+                totalPrice += item.orderProductPrice;
+                date.push(a);
+                })
+          
+            var options = {
+                chart: {
+                    id: 'sparkline1',
+                  
+                    type: 'area',
+                    height: 160,
+                    sparkline: {
+                        enabled: true
+                    },
+                },
+                stroke: {
+                    curve: 'straight'
+                },
+                fill: {
+                    opacity: 1,
+                },
+                series: [{
+                    name: 'Gün İçinde Onaylanan Satış',
+                    data: dateSales
+                }],
+                labels: date,
+                yaxis: {
+                    min: 0
+                },
+                xaxis: {
+                    type: 'string',
+                },
+                colors: ['#DCE6EC'],
+                title: {
+                    text: totalPrice+" TL",
+                    offsetX: 30,
+                    style: {
+                        fontSize: '24px',
+                        cssClass: 'apexcharts-yaxis-title'
+                    }
+                },
+                subtitle: {
+                    text: 'Toplam Onaylanan Ürün Fiyatı',
                     offsetX: 30,
                    
                 }
@@ -241,7 +450,7 @@
                     group: 'sparklines'
                 },
                 series: [{
-                    name: 'purple',
+                    name: 'Kayıt Olan Müşteri Adeti',
                     data: date
                 }],
                 stroke: {

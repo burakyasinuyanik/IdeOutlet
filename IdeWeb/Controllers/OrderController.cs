@@ -1,8 +1,11 @@
 ﻿using Ide.Business.Abstract;
 using Ide.Business.Concrete;
 using Ide.Repository.Shared.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration.UserSecrets;
+using System.Data;
 
 namespace Ide.Web.Controllers
 {
@@ -30,6 +33,8 @@ namespace Ide.Web.Controllers
             return View();
         }
         [HttpPost]
+      
+
         public IActionResult NewOrder(string mail)
         {
            if(shopingBasketService.BasketNull(mail))
@@ -46,11 +51,14 @@ namespace Ide.Web.Controllers
 
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
+
         public IActionResult ConsentOrderProductPrice(int orderId)
         {
             
             return Json(orderService.ConsentOrderProductPrice(orderId));
         }
+        [Authorize(Roles = "Admin")]
 
         [HttpPost]
         public IActionResult AnnulmentOrderProductPrice(int orderId)
@@ -59,6 +67,7 @@ namespace Ide.Web.Controllers
             return Json(orderService.AnnulmentOrderProductPrice(orderId));
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult ChangeOrderProductType(int orderId, int orderProductTypeId,int productId,string productNo)
         {
             orderProductTypeService.ChangeOrderProductType(orderId, orderProductTypeId, productId, productNo);
@@ -66,43 +75,53 @@ namespace Ide.Web.Controllers
             return Ok(new { result = true, message = "Ürün Stasüsü Değişti !" });
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult ChangeOrderType(int orderId,int orderTypeId)
         {
             orderService.ChangeOrderType(orderId, orderTypeId);
             return Ok(new {result =true,message="Sipariş Stasüsü Değişti !"});
         }
         [HttpPost]
+
         public IActionResult GetAll(string mail)
         {
 
             return Json(orderService.GetAll(mail));
         }
+        [Authorize(Roles = "Admin")]
 
         public IActionResult OrderControl()
         {
             return View();
         }
+        [Authorize(Roles = "Admin")]
+
         public IActionResult GetAllFull()
         {
             return Json(new {data=orderService.GetAllFull()});
         }
-     
-       [Route("/OrderPage/{orderId}")]
+        [Authorize(Roles = "Admin")]
+
+        [Route("/OrderPage/{orderId}")]
        public IActionResult OrderPage(int orderId)
         {
             return View(orderService.GetOrderPage(orderId));
         }
+        [Authorize(Roles = "Admin")]
 
         public IActionResult OrderDetail(int orderId)
         {
            
             return Json(orderService.GetOrderDetail( orderId));
         }
+        [Authorize(Roles = "Admin")]
 
         public IActionResult GetOrderStatus()
         {
             return Json(orderTypeService.GetOrderStatus());
         }
+        [Authorize(Roles = "Admin")]
+
         public IActionResult GetOrderProductStatus()
         {
             return Json(orderProductTypeService.GetOrderProductStatus());

@@ -6,12 +6,12 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>Starter Page | Minible - Admin & Dashboard Template</title>
+    <title>Ide-Outlet</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="~/assets/images/favicon.ico">
+    <link rel="shortcut icon" href="~/assets/images/favicon1.ico">
 
     <!-- Bootstrap Css -->
     <link href="~/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
@@ -27,8 +27,8 @@
 </head>
 
 
-<body>
-@*
+<body >
+
     <div id="loading" style="position: absolute;
                          top: 0;
                          left: 0;
@@ -41,11 +41,11 @@
                         background-color:#80808091
                      ">
         <div ><img src="~/assets/images/loading.gif" style="width:250px" /></div>
-    </div>*@
+    </div>
 
     <!-- <body data-layout="horizontal" data-topbar="colored"> -->
     <!-- Begin page -->
-    <div id="layout-wrapper">
+    <div id="layout-wrapper" >
 
 
         <header id="page-topbar">
@@ -53,18 +53,18 @@
                 <div class="d-flex">
                     <!-- LOGO -->
                     <div class="navbar-brand-box">
-                        <a href="index.html" class="logo logo-dark">
+                        <a asp-action="Index" asp-controller="Home" class="logo logo-dark">
                             <span class="logo-sm">
-                                <img src="~/assets/images/logo-sm.png" alt="" height="22">
+                                <img src="~/assets/images/logo-sm1.png" alt="" height="22">
                             </span>
                             <span class="logo-lg">
                                 <img src="~/assets/images/logo-dark.png" alt="" height="20">
                             </span>
                         </a>
 
-                        <a href="index.html" class="logo logo-light">
+                        <a asp-action="Index" asp-controller="Home" class="logo logo-light">
                             <span class="logo-sm">
-                                <img src="~/assets/images/logo-sm.png" alt="" height="22">
+                                <img src="~/assets/images/logo-sm1.png" alt="" height="22">
                             </span>
                             <span class="logo-lg">
                                 <img src="~/assets/images/logo-light.png" alt="" height="20">
@@ -119,7 +119,7 @@
                     <div class="dropdown d-inline-block">
                         <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="rounded-circle header-profile-user" src="~/assets/images/users/avatar-4.jpg"
+                            <img class="rounded-circle header-profile-user" src="~/assets/images/users/users12.png"
                                  alt="Header Avatar">
                             <span class="d-none d-xl-inline-block ms-1 fw-medium font-size-15">@User.FindFirstValue(ClaimTypes.Name)</span>
                             <i class="uil-angle-down d-none d-xl-inline-block font-size-15"></i>
@@ -140,18 +140,18 @@
 
             <!-- LOGO -->
             <div class="navbar-brand-box">
-                <a href="index.html" class="logo logo-dark">
+                <a asp-action="Index" asp-controller="Home" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="~/assets/images/logo-sm.png" alt="" height="22">
+                        <img src="~/assets/images/logo-sm1.png" alt="" height="40">
                     </span>
                     <span class="logo-lg">
-                        <img src="~/assets/images/logo-dark.png" alt="" height="20">
+                        <img src="~/assets/images/logos.png" alt="" height="30">
                     </span>
                 </a>
 
-                <a href="index.html" class="logo logo-light">
+                <a asp-action="Index" asp-controller="Home" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="~/assets/images/logo-sm.png" alt="" height="22">
+                        <img src="~/assets/images/logo-sm1.png" alt="" height="40">
                     </span>
                     <span class="logo-lg">
                         <img src="~/assets/images/logo-light.png" alt="" height="20">
@@ -170,33 +170,36 @@
                     <!-- Left Menu Start -->
                     <ul class="metismenu list-unstyled" id="side-menu">
                         <li class="menu-title">Menu</li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li>
+                                <a asp-action="Index" asp-controller="DashBoard">
+                                    <i class="uil-home-alt"></i><span class="badge rounded-pill bg-primary float-end">01</span>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li>
 
-                        <li>
-                            <a asp-action="Index" asp-controller="DashBoard" >
-                                <i class="uil-home-alt"></i><span class="badge rounded-pill bg-primary float-end">01</span>
-                                <span>Dashboard</span>
-                            </a>
-                        </li>
+                            <li>
+                                <a asp-action="UserShow" asp-controller="User">
+                                    <span class="badge rounded-pill bg-primary float-end">148</span>
+                                    <span>Müşterileri yönetim paneli</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-action="ProductCustom" asp-controller="Product">
+                                    <span class="badge rounded-pill bg-primary float-end">148</span>
+                                    <span>Ürün yönetim paneli</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-action="OrderControl" asp-controller="Order">
+                                    <span class="badge rounded-pill bg-primary float-end">148</span>
+                                    <span>Sipariş yönetim paneli</span>
+                                </a>
+                            </li>
 
-                        <li>
-                            <a asp-action="UserShow" asp-controller="User">
-                               <span class="badge rounded-pill bg-primary float-end">148</span>
-                                <span>Müşterileri yönetim paneli</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-action="ProductCustom" asp-controller="Product">
-                                <span class="badge rounded-pill bg-primary float-end">148</span>
-                                <span>Ürün yönetim paneli</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-action="OrderControl" asp-controller="Order">
-                                <span class="badge rounded-pill bg-primary float-end">148</span>
-                                <span>Sipariş yönetim paneli</span>
-                            </a>
-                        </li>
-
+                        }
+                       
                         <li>
                             <a asp-action="Index" asp-controller="Product">
                                 <i class="uil-shopping-cart-alt"></i><span class="badge rounded-pill bg-primary float-end">148</span>
@@ -285,14 +288,19 @@
     <partial name="_PluginsPartial.cshtml" />
 
     <script>
-        //$(document).on({
-        //    ajaxStart: function () {
-        //        $('#loading').show();
-        //    },
-        //    ajaxStop: function () {
-        //        $('#loading').hide();
-        //    }
-        //});
+        $(document).on({
+            ajaxStart: function () {
+                $('#loading').show();
+            },
+            ajaxStop: function () {
+                $('#loading').hide();
+            }
+        });
+
+        $.ajax({
+
+
+        })
 
     </script>
 

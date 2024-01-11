@@ -1,7 +1,9 @@
 ﻿using Ide.Business.Abstract;
 using Ide.Models;
 using Ide.Repository.Shared.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace Ide.Web.Controllers
 {
@@ -22,13 +24,14 @@ namespace Ide.Web.Controllers
             
             return Json(new { data = productService.GetAll() });
         }
-        
+        [Authorize(Roles = "Admin")]
         public IActionResult ProductCustom(int id)
         {
 
             return View();
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult ProductUpdate(Product product)
         {
             productService.ProductUpdate(product);
@@ -40,15 +43,18 @@ namespace Ide.Web.Controllers
 
             return Json(productService.ProductGetById(productId));
         }
+
         public IActionResult GetProductRemainingStock(string productNo)
         {
             return Json(productService.GetProductRemainingStock(productNo));
         }
+
         public IActionResult GetAllCustomer()
         {
             return Json(new { data = productService.GetAllCustomer() });
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task <IActionResult> NewProduct(Product product)
         {
           
@@ -65,6 +71,7 @@ namespace Ide.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddPicture(int productId, string picture)
         {
 
@@ -81,6 +88,7 @@ namespace Ide.Web.Controllers
 
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int productId)
         {
 
