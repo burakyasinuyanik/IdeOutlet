@@ -4,8 +4,10 @@ using Ide.Repository.Shared.Abstract;
 using Ide.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,6 +50,66 @@ namespace Ide.Business.Concrete
             unitOfWork.Save();
         }
 
+        public async Task ExcelAddProduct(IFormCollection form)
+        {
+            string filePath = "";
+            var file = form.Files["file"];
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Files", "Tmp");
+            if (file != null && file.Length > 0)
+            {
+
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                var fileName = Helper.RandomStringGenerator(3) + "-" + file.FileName.TextClean();
+                // Save the file as needed, for example:
+                filePath = Path.Combine(path, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+                List<Product> newProducts = new List<Product>();
+                string excelDosyaYolu = path;
+                ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+                using (var package = new ExcelPackage(new FileInfo(filePath)))
+                {
+                    ExcelWorkbook workBook = package.Workbook;
+                    if (workBook != null)
+                    {
+
+                        if (workBook.Worksheets.Count > 0)
+                        {
+                            ExcelWorksheet currentWorksheet = workBook.Worksheets.First();
+
+                            for (int i = 2; i <= currentWorksheet.Dimension.End.Row; i++)
+                            {
+
+                                Product product = new Product();
+                                product.ProductNo= currentWorksheet.Cells[i, 2].Text.ToString();
+                                product.Barcode= currentWorksheet.Cells[i, 3].Text.ToString();
+                                product.Name= currentWorksheet.Cells[i, 6].Text.ToString();
+                                product.Description= currentWorksheet.Cells[i, 7].Text.ToString() == "" ? currentWorksheet.Cells[i, 1].Text.ToString(): currentWorksheet.Cells[i, 7].Text.ToString();
+                                product.Stock = currentWorksheet.Cells[i, 10].Text.ToInt();
+                                product.RemainingStock = product.Stock;                           
+                                product.Price = double.Parse(currentWorksheet.Cells[i, 11].Value.ToString());
+                                product.Picture = currentWorksheet.Cells[i, 2].Text.ToString() + ".png";
+                                product.IsActive = true;
+                                newProducts.Add(product);
+
+                            }
+
+
+                        }
+                        unitOfWork.Products.AddRange(newProducts);
+                        unitOfWork.Save();
+                    }
+                }
+            }
+        }
+
         public IQueryable GetAll()
         {
           return  unitOfWork.Products.GetAll();
@@ -55,7 +117,7 @@ namespace Ide.Business.Concrete
 
         public IQueryable GetAllCustomer()
         {
-            return unitOfWork.Products.GetAll(u=>u.IsActive==true);
+            return unitOfWork.Products.GetAll(u=>u.IsActive==true).OrderByDescending(o=>o.RemainingStock);
         }
 
         public int GetProductRemainingStock(string productNo)

@@ -2,11 +2,11 @@
 
 <div class="card border border-primary col-12">
     <div class="card-header bg-primary border-primary">
-        <h5 class="my-0 text-white"><i class="uil uil-user me-3"></i>Ürün Listesi</h5>
+        <h5 class="my-0 text-white "><i class="uil uil-user "></i>Ürün Listesi</h5>
 
-        <div class="card-title"><a class="btn btn-success" onclick="newProductAdd()">Yeni Ürün Yükle</a></div>
 
-      
+        <a class="btn btn-success col-2" onclick="newProductAdd()">Yeni Ürün Yükle</a>
+        <button class="btn btn-success col-2" onclick="excelProductAdd()" type="button" id="fileSaveBtn">Excel'den Yükle</button>
 
       
 
@@ -18,6 +18,41 @@
 
     </div><!-- end card-body -->
 </div>
+
+<div class="modal fade" id="modalFileAddUpdate" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalFile">Excel'den Ürün Yükle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-target="#modalFileAddUpdate" aria-label="Close"></button>
+            </div>
+            <form id="frmFile" class="needs-validation">
+                <div class="modal-body">
+
+                    <div class="container">
+
+
+
+                        <div class="mb-3 row">
+                            <label for="inputName" class="col-4 col-form-label">Ürünler Dosyası</label>
+                            <div class="col-8">
+                                <input type="file" class="form-control " required id="txtFileName" placeholder="Dosya seçiniz">
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-target="#modalFileAddUpdate">Kapat</button>
+                    <button type="submit" id="btnSave" class="btn btn-primary">Ekle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="modalAddUpdate" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal" role="document">
         <div class="modal-content">
@@ -223,6 +258,48 @@
 
             })
 
+
+        }
+
+        function excelProductAdd(){
+                $('#frmFile').parsley().reset();
+                $("#frmFile").removeClass("was-validated");
+                $("#modalFileAddUpdate").modal("show");
+                $(".input-mask").inputmask();
+                $("input").val("");
+
+                $("#btnSave").off().click(function () {
+                    event.preventDefault();
+                    if ($("#frmFile").parsley().isValid() === false) {
+                        $('#frmFile').parsley().validate();
+                        $("#frmFile").addClass("was-validated");
+                    }
+                    else {
+                        var formData = new FormData();
+                        formData.append("file", $("#txtFileName")[0].files[0]);
+                        $.ajax({
+                            type: "POST",
+                            url: "/Product/ExcelAddProduct",
+                            contentType: false,
+                            processData: false,
+                            data: formData,
+                            success: function (res) {
+                               
+
+                                toastr.success("BAŞARILI", "Ürünler başarıyla eklenmiştir.");
+                                $('#tblProduct').DataTable().ajax.reload();
+
+                                $("#modalFileAddUpdate").modal("hide");
+
+                            },
+                            error: function (res) {
+                                toastr.error("HATA", res.responseText);
+                            }
+
+                        })
+
+                    }
+                })
 
         }
 

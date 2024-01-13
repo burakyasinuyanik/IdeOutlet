@@ -19,5 +19,6 @@ namespace Ide.Business.Abstract
 
         public void Delete(int productId);
         public int GetProductRemainingStock(string productNo);
+        Task ExcelAddProduct(IFormCollection form);
     }
 }

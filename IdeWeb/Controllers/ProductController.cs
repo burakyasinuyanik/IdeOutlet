@@ -30,6 +30,10 @@ namespace Ide.Web.Controllers
 
             return View();
         }
+        public IActionResult ProductDetail(int productId)
+        {
+            return View(productService.ProductGetById(productId));
+        }
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public IActionResult ProductUpdate(Product product)
@@ -68,6 +72,23 @@ namespace Ide.Web.Controllers
             }
             return Ok(new { result = true, message = "Ürün eklendi !" });
 
+        }
+        [Authorize(Roles = "Admin")]
+
+        public async Task<IActionResult> ExcelAddProduct()
+        {
+            try {
+                IFormCollection form = Request.Form;
+
+               await productService.ExcelAddProduct(form);
+                return Ok(new { result = true, message = "Ürünler Eklendi" });
+
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { result = false, message = "Ürünler eklenirken hata oluştu: " + ex.Message });
+
+            }
         }
 
         [HttpPost]

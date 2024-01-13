@@ -69,14 +69,15 @@
                             Kalan Stok:${item.remainingStock}
                                                                       
                          </div>
-                               
+                                       <a href="Product/ProductDetail?productId=${item.id}">
 
                                                         <img src="images/product/${item.picture}" alt=""   class="img-fluid mx-auto d-block">
+                                                        </a>
                     </div>
 
                     <div class="text-center product-content p-4">
 
-                        <h5 class="mb-1"><a href="#" class="text-reset ">${item.name}</a></h5>
+                                <h5 class="mb-1"><a href="Product/ProductDetail?productId=${item.id}" class="text-reset ">${item.name}</a></h5>
                         <div style="font-size:15px" class="product-ribbon badge bg-danger text">
                                    ${item.description}
                         </div>
