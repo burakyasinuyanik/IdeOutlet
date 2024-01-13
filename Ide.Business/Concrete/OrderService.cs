@@ -1,7 +1,10 @@
 ﻿using Ide.Business.Abstract;
 using Ide.Models;
 using Ide.Repository.Shared.Abstract;
+using Ide.Utility;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -111,6 +114,44 @@ namespace Ide.Business.Concrete
                 return null;
             }
             
+        }
+
+
+        public string MailMessege(int orderId)
+        {
+
+           Order order= unitOfWork.Orders.GetAll(o => o.Id == orderId).Include(o=>o.AppUser).Include(o => o.OrderProducts).ThenInclude(o => o.OrderProductType).FirstOrDefault();
+          
+            string mail=  order.AppUser.Email;
+            string subject = $"{order.Id}' nolu Siparişiniz Hakkında";
+            double price = 0;
+            List<string> onaylananUrunler = new List<string>();
+            List<string> iptalEdilenUrunler = new List<string>();
+
+            order.OrderProducts.Where(o => o.OrderProductTypeId == unitOfWork.OrderProductTypes.GetAll(o => o.Name.ToLower().Contains("onay")).FirstOrDefault().Id).ToList().ForEach(o => price += o.Price);
+            order.OrderProducts.Where(o => o.OrderProductTypeId == unitOfWork.OrderProductTypes.GetAll(o => o.Name.ToLower().Contains("onay")).FirstOrDefault().Id).ToList().ForEach(o => onaylananUrunler.Add(o.Name+" "+o.Price+" TL"));
+            order.OrderProducts.Where(o => o.OrderProductTypeId == unitOfWork.OrderProductTypes.GetAll(o => o.Name.ToLower().Contains("iptal")).FirstOrDefault().Id).ToList().ForEach(o => iptalEdilenUrunler.Add(o.Name+" "+o.Price+" TL"));
+
+            string b = "";
+            string c = "";
+            onaylananUrunler.ForEach(o => b += o+"<br>");
+            iptalEdilenUrunler.ForEach(o => c += o + "<br>");
+
+            string a = $"Merhaba {order.AppUser.Name},<br>" +
+                $"{orderId}'nolu Siparişindeki aşağıdaki ürünlerin satın alman için onaylandı.<br>" +
+                $"Ödemeyi xxxx-xxxxx-xxxxxx-xxxx-xxxx outlet-{orderId} açıklaması ile 24 saat içinde iban'a yatırman gerekiyor.<br>" +
+                $"Ödeme yaptıktan sonra bu mail üzerinden dekontunu paylaşmanı rica ediyoruz.<br>" +
+                $"Toplam Ödenecek Tutar: {price} TL<br>" +
+                $"Siparişinde satın almaya hak kazandığın ürünler;<br>" +
+                $"{b}<br>" +
+                $"Satın almaya hak kazanamadığın ürünler;<br>" +
+                $"{c}" +
+                $"Teşekkürler İyi Alışverişler"
+                
+                ;
+           bool mailBool= SendMail.mailSend(mail, subject, a);
+
+            return a;
         }
     }
 }

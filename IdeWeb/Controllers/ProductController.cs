@@ -47,15 +47,15 @@ namespace Ide.Web.Controllers
 
             return Json(productService.ProductGetById(productId));
         }
-
+      
         public IActionResult GetProductRemainingStock(string productNo)
         {
             return Json(productService.GetProductRemainingStock(productNo));
         }
         [HttpPost]
-        public IActionResult GetAllCustomer(int page,string search)
+        public IActionResult GetAllForCustomer(int page,string search)
         {
-            return Json(new { data = productService.GetAllCustomer(page,search) });
+            return Json(new { data = productService.GetAllForCustomer(page,search) });
         }
         [HttpPost]
         [Authorize(Roles = "Admin")]

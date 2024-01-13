@@ -32,9 +32,14 @@ namespace Ide.Web.Controllers
         {
             return View();
         }
-        [HttpPost]
-      
+     
+        public IActionResult SendMail(int orderId)
+        {
+            return Json(orderService.MailMessege(orderId));
+        }
 
+
+        [HttpPost]
         public IActionResult NewOrder(string mail)
         {
            if(shopingBasketService.BasketNull(mail))

@@ -115,7 +115,7 @@ namespace Ide.Business.Concrete
           return  unitOfWork.Products.GetAll();
         }
       
-        public IQueryable GetAllCustomer(int page,string search)
+        public IQueryable GetAllForCustomer(int page,string search)
         {
             int skip = 0;
             int take = 20;
