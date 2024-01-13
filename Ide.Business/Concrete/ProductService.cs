@@ -114,10 +114,18 @@ namespace Ide.Business.Concrete
         {
           return  unitOfWork.Products.GetAll();
         }
-
-        public IQueryable GetAllCustomer()
+      
+        public IQueryable GetAllCustomer(int page,string search)
         {
-            return unitOfWork.Products.GetAll(u=>u.IsActive==true).OrderByDescending(o=>o.RemainingStock);
+            int skip = 0;
+            int take = 20;
+
+            if (page > 1)
+            {
+                skip = take * (page-1);
+            }
+           
+            return unitOfWork.Products.GetAll(u=>u.IsActive==true && search != null ? u.Name.ToLower().Contains(search) : true).OrderByDescending(o=>o.RemainingStock).Skip(skip).Take(take);
         }
 
         public int GetProductRemainingStock(string productNo)

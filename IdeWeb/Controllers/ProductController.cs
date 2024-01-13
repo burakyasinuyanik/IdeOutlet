@@ -52,10 +52,10 @@ namespace Ide.Web.Controllers
         {
             return Json(productService.GetProductRemainingStock(productNo));
         }
-
-        public IActionResult GetAllCustomer()
+        [HttpPost]
+        public IActionResult GetAllCustomer(int page,string search)
         {
-            return Json(new { data = productService.GetAllCustomer() });
+            return Json(new { data = productService.GetAllCustomer(page,search) });
         }
         [HttpPost]
         [Authorize(Roles = "Admin")]
@@ -75,6 +75,19 @@ namespace Ide.Web.Controllers
         }
         [Authorize(Roles = "Admin")]
 
+        public IActionResult PageSlice(string search)
+        {
+
+            double productCount = (unitOfWork.Products.GetAll(p => p.IsActive == true&& search != null ? p.Name.ToLower().Contains(search) : true ).ToList().Count() / 20.0); ;
+            double Number2 = Math.Round(productCount ,MidpointRounding.ToPositiveInfinity);
+            if (Number2 == 0)
+                Number2 = 1;
+            return Json(new
+            {
+                PageCount=Number2.ToString(),
+               
+            }) ;
+        }
         public async Task<IActionResult> ExcelAddProduct()
         {
             try {

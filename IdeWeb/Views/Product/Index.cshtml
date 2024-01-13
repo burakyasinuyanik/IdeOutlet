@@ -13,18 +13,91 @@
 
               
             </div>
-            
+            <div class="row mt-4">
+                <div class="col-sm-6">
+                  
+                </div>
+                <div class="col-sm-6">
+                    <div class="float-sm-end">
+                        <ul class="pagination pagination-rounded mb-sm-0" id="pageSlice">
+                            
+                           
+                           
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 @section Scripts{
     <script>
+        var searchMarjor;
 
         $(document).ready(function(){
-            fillProduct();
 
+            pageSliceCount();
+            fillProduct(1);
+            $("#searchOne").keypress(function () {
+
+                $("#searchClear").empty();
+                $("#searchClear").append(`
+                                <a href="" onclick="searchProduct()" class="btn btn-success w-xs">Ara</a>
+                <a href="" onclick="searchInputClear()" class="btn btn-danger w-xs">Aramayı Temizle</a>
+                `);
+            })
         })
+        function searchInputClear(){
+            $("#searchOne").val("");
+            searchProduct();
+            $("#searchClear").empty();
+        }
+    
+        function searchProduct(){
+            event.preventDefault();
+            searchMarjor = $("#searchOne").val();
+            $("#pageSlice").empty();
+            pageSliceCount($("#searchOne").val());
+            fillProduct(1, searchMarjor);
+
+        }
+
+        function pageSliceCount(search){
+         
+            $.ajax({
+                type:"get",
+                url:"Product/PageSlice",
+                data:{
+                    search:searchMarjor,
+                },
+                success:function(res){
+                   
+                    for (let a = 1; a <= res.pageCount; a++) {
+                        
+                        $("#pageSlice").append(`
+                                    <li class="page-item" id="list-${a}">
+                                        <a href="" onclick="pageSelect(${a})" class="page-link">${a}</a>
+                                    </li>
+                        `);
+                        if (a == 1) {
+                            $("#list-" + a).addClass("active");
+
+                        }
+                    }
+                    
+                }
+            })
+        }
+        function pageSelect(a){
+            event.preventDefault();
+            $(".active").removeClass("active");
+            $("#list-" + a).addClass("active");
+
+
+            fillProduct(a);
+
+        }
 
         function addBasket(id){
             $.ajax({
@@ -48,11 +121,37 @@
             })
         }
 
-        function fillProduct(){
+        function fillProduct(page,search){
+         
+
 
             $.ajax({
+                type:"post",
                 url:"/Product/GetAllCustomer/",
+                data:{
+                    page:page,
+                    search:searchMarjor
+                },
                 success:function(res){
+                    $("#productAll").empty();
+                    
+                    if(res.data==""){
+                        $("#productAll").append(`
+                                <div class="col-sm-12">
+                                                        <div class="alert alert-border alert-border-warning alert-dismissible fade show mt-4 px-4 mb-0 text-center" role="alert">
+                                                            <i class="uil uil-exclamation-triangle d-block display-4 mt-2 mb-3 text-warning"></i>
+                                                            <h5 class="text-warning">Uyarı</h5>
+                                                            <p>Aradığınız Ürün Bulunmamaktadır.</p>
+                                                            
+
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                        `);
+                        $("#pageSlice").empty();
+                       
+                    };
+
                     for(var item of res.data){
                         $("#productAll").append(`
                                 
@@ -100,7 +199,7 @@
                         `)
                     }
                 }
-
+                        
             })
         }
     </script>

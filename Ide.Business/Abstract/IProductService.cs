@@ -13,7 +13,7 @@ namespace Ide.Business.Abstract
         IQueryable GetAll();
         public void ProductUpdate(Product product);
         public Product ProductGetById(int productId);
-        IQueryable GetAllCustomer();
+        IQueryable GetAllCustomer(int page,string search);
         Task NewProduct(Product product);
         Task AddProductPicture(int productId,string picture);
 
