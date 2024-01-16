@@ -73,7 +73,7 @@ namespace Ide.Web.Controllers
             return Ok(new { result = true, message = "Ürün eklendi !" });
 
         }
-        [Authorize(Roles = "Admin")]
+       
 
         public IActionResult PageSlice(string search)
         {
@@ -88,6 +88,8 @@ namespace Ide.Web.Controllers
                
             }) ;
         }
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> ExcelAddProduct()
         {
             try {

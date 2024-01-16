@@ -117,7 +117,7 @@ namespace Ide.Business.Concrete
         }
 
 
-        public string MailMessege(int orderId)
+        public bool MailMessage(int orderId)
         {
 
            Order order= unitOfWork.Orders.GetAll(o => o.Id == orderId).Include(o=>o.AppUser).Include(o => o.OrderProducts).ThenInclude(o => o.OrderProductType).FirstOrDefault();
@@ -146,12 +146,13 @@ namespace Ide.Business.Concrete
                 $"{b}<br>" +
                 $"Satın almaya hak kazanamadığın ürünler;<br>" +
                 $"{c}" +
-                $"Teşekkürler İyi Alışverişler"
+                $"Teşekkürler İyi Alışverişler<br>" +
+                $"SSH"
                 
                 ;
            bool mailBool= SendMail.mailSend(mail, subject, a);
 
-            return a;
+            return mailBool;
         }
     }
 }

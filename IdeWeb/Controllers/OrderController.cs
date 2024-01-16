@@ -35,7 +35,8 @@ namespace Ide.Web.Controllers
      
         public IActionResult SendMail(int orderId)
         {
-            return Json(orderService.MailMessege(orderId));
+
+            return Ok(new {result=orderService.MailMessage(orderId)});
         }
 
 
@@ -56,7 +57,7 @@ namespace Ide.Web.Controllers
 
         }
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        
 
         public IActionResult ConsentOrderProductPrice(int orderId)
         {

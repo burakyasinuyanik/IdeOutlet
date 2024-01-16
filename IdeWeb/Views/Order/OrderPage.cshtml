@@ -14,7 +14,11 @@
                             </select>
                             <label for="floatingSelectGrid">Sipariş Statüsü Seçiniz</label>
                         </div>
+                        <div class="form-floating mb-3">
+                            <btn class="btn btn-primary float-center ms-2 " onclick="sendMail()">Ödeme Maili At</btn>
+                        </div>
                     </div>
+                  
                 </div>
                 <div class="table-responsive">
                     <table class="table table-centered mb-0 table-nowrap">
@@ -118,6 +122,54 @@
          
 
         })
+
+        function sendMail(){
+            Swal.fire({
+                title: "Ödeme Maili Atılacak",
+                text: "Emin Misiniz?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Evet",
+                cancelButtonText: "Hayır"
+
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        type:"post",
+                        url:"/Order/SendMail/",
+                        data:{
+                            orderId:@Model.Id
+                        },
+                        success:function(res){
+                           
+                            if(res.result){
+                                Swal.fire({
+                                    title: "Mail Atıldı!",
+                                    text: "Mail Atma Başarılı",
+                                    icon: "success",
+                                    confirmButtonText: "Tamam",
+
+                                });
+
+                            }else{
+                                Swal.fire({
+                                    title: "Mail Atılamadı!",
+                                    text: "Mail Atma Başarısız",
+                                    icon: "error",
+                                    confirmButtonText: "Tamam",
+
+                                });
+
+                            }
+                        }
+                    })
+                 
+                }
+            });
+        }
 
         function fillOrderProduct(){
             $.ajax({

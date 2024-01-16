@@ -17,6 +17,6 @@ namespace Ide.Business.Abstract
         public void ChangeOrderType(int orderId, int orderTypeId);
         public double ConsentOrderProductPrice(int orderId);
         public double AnnulmentOrderProductPrice(int orderId);
-        public string MailMessege(int orderId);
+        public bool MailMessage(int orderId);
     }
 }
