@@ -3,6 +3,16 @@
 <div id="orders">
     
 </div>
+<div class="row mt-4">
+    <div class="col-sm-6">
+    </div>
+    <div class="col-sm-6">
+        <div class="float-sm-end">
+            <ul class="pagination pagination-rounded mb-sm-0" id="pageSlice">
+            </ul>
+        </div>
+    </div>
+</div>
 
 
 @section Scripts{
@@ -17,8 +27,8 @@
   
 
         $(document).ready(function(){
-            fillOrder();
-          
+            fillOrder(1);
+            pageSliceCount();
         });
 
         function consentOrderProductPrice(orderId) {
@@ -33,13 +43,50 @@
                 }
             })
         }
+        function pageSelect(a) {
+            event.preventDefault();
+            $(".active").removeClass("active");
+            $("#list-" + a).addClass("active");
 
-        function fillOrder(){
+            $("#orders").empty();
+            fillOrder(a);
+
+        }
+
+        function pageSliceCount() {
+
+            $.ajax({
+                type: "get",
+                url: "/Order/PageSlice",
+                data:{
+                    userId:"@User.FindFirstValue(ClaimTypes.NameIdentifier)",
+                },
+                success: function (res) {
+
+                    for (let a = 1; a <= res.pageCount; a++) {
+
+                        $("#pageSlice").append(`
+                                            <li class="page-item" id="list-${a}">
+                                                <a href="" onclick="pageSelect(${a})" class="page-link">${a}</a>
+                                            </li>
+                                `);
+                        if (a == 1) {
+                            $("#list-" + a).addClass("active");
+
+                        }
+                    }
+
+                }
+            })
+        }
+
+        function fillOrder(pageId) {
             $.ajax({
                 type:"post",
                 url:"/Order/GetAll/",
                 data:{
-                    mail:"@User.FindFirstValue(ClaimTypes.Name)",
+                    id:"@User.FindFirstValue(ClaimTypes.NameIdentifier)",
+                    pageId:pageId,
                 },
                 success:function(res){
                     let price;

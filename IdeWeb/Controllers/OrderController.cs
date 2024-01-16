@@ -87,12 +87,26 @@ namespace Ide.Web.Controllers
             orderService.ChangeOrderType(orderId, orderTypeId);
             return Ok(new {result =true,message="Sipariş Stasüsü Değişti !"});
         }
-        [HttpPost]
 
-        public IActionResult GetAll(string mail)
+        public IActionResult PageSlice(int userId)
         {
 
-            return Json(orderService.GetAll(mail));
+            double productCount = (unitOfWork.Orders.GetAll(u=>u.AppUser.Id==userId).ToList().Count() / 5.00); ;
+            double Number2 = Math.Round(productCount, MidpointRounding.ToPositiveInfinity);
+            if (Number2 == 0)
+                Number2 = 1;
+            return Json(new
+            {
+                PageCount = Number2.ToString(),
+
+            });
+        }
+
+        [HttpPost]
+        public IActionResult GetAll(int id,int pageId)
+        {
+
+            return Json(orderService.GetAll(id,pageId));
         }
         [Authorize(Roles = "Admin")]
 

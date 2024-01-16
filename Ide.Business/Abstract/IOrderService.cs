@@ -9,7 +9,7 @@ namespace Ide.Business.Abstract
 {
     public interface IOrderService
     {
-        IQueryable GetAll(string mail);
+        List<Order> GetAll(int id,int pageId);
         public Order NewOrder(string mail);
         IQueryable GetAllFull();
         public Order GetOrderDetail(int orderId);

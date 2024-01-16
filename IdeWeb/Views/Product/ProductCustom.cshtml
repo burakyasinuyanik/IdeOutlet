@@ -46,7 +46,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-target="#modalFileAddUpdate">Kapat</button>
-                    <button type="submit" id="btnSave" class="btn btn-primary">Ekle</button>
+                    <button type="submit" id="btnSave2" class="btn btn-primary">Ekle</button>
                 </div>
             </form>
         </div>
@@ -268,7 +268,7 @@
                 $(".input-mask").inputmask();
                 $("input").val("");
 
-                $("#btnSave").off().click(function () {
+                $("#btnSave2").off().click(function () {
                     event.preventDefault();
                     if ($("#frmFile").parsley().isValid() === false) {
                         $('#frmFile').parsley().validate();

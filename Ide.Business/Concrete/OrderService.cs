@@ -54,9 +54,18 @@ namespace Ide.Business.Concrete
             return consentPrice;
         }
 
-        public IQueryable GetAll(string mail)
+        public List<Order> GetAll(int id, int pageId)
         {
-            return unitOfWork.Orders.GetAll(u => u.AppUser.Email == mail).Include(u=>u.OrderProducts).ThenInclude(u=>u.OrderProductType).Include(u=>u.OrderType).OrderByDescending(u=>u.Id);
+            int skip = 0;
+            int take = 5;
+
+            if (pageId > 1)
+            {
+                skip = take * (pageId - 1);
+            }
+
+
+            return unitOfWork.Orders.GetAll(u => u.AppUser.Id == id).Include(u=>u.OrderProducts).ThenInclude(u=>u.OrderProductType).Include(u=>u.OrderType).OrderByDescending(u=>u.Id).Skip(skip).Take(take).ToList();
         }
 
         public IQueryable GetAllFull()
