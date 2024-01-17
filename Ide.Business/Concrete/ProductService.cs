@@ -28,7 +28,7 @@ namespace Ide.Business.Concrete
             Product product = unitOfWork.Products.GetById(productId);
 
             byte[] imageBytes = Convert.FromBase64String(picture.ToString().Split(',')[1]);
-            string fileName = product.Name.TextClean() + "-" + product.ProductNo + ".png";
+            string fileName =product.ProductNo + ".png";
             if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "Product")))
             {
                 Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "Product"));
@@ -125,7 +125,7 @@ namespace Ide.Business.Concrete
                 skip = take * (page-1);
             }
            
-            return unitOfWork.Products.GetAll(u=>u.IsActive==true && search != null ? u.Name.ToLower().Contains(search) : true).OrderByDescending(o=>o.RemainingStock).Skip(skip).Take(take);
+            return unitOfWork.Products.GetAll(u=> search != null ? u.Name.ToLower().Contains(search) : true).Where(u => u.IsActive == true).OrderByDescending(o=>o.RemainingStock).Skip(skip).Take(take);
         }
 
         public int GetProductRemainingStock(string productNo)

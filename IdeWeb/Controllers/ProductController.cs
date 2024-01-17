@@ -78,7 +78,7 @@ namespace Ide.Web.Controllers
         public IActionResult PageSlice(string search)
         {
 
-            double productCount = (unitOfWork.Products.GetAll(p => p.IsActive == true&& search != null ? p.Name.ToLower().Contains(search) : true ).ToList().Count() / 20.0); ;
+            double productCount = (unitOfWork.Products.GetAll(p => search != null ? p.Name.ToLower().Contains(search) : true ).Where(u => u.IsActive == true).ToList().Count() / 20.0); ;
             double Number2 = Math.Round(productCount ,MidpointRounding.ToPositiveInfinity);
             if (Number2 == 0)
                 Number2 = 1;

@@ -148,14 +148,17 @@ namespace Ide.Business.Concrete
 
             string a = $"Merhaba {order.AppUser.Name},<br>" +
                 $"{orderId}'nolu Siparişindeki aşağıdaki ürünlerin satın alman için onaylandı.<br>" +
-                $"Ödemeyi xxxx-xxxxx-xxxxxx-xxxx-xxxx outlet-{orderId} açıklaması ile 24 saat içinde iban'a yatırman gerekiyor.<br>" +
+                $"Ödemeyi altta bulunan Iban'a outlet-{orderId} açıklaması ile 24 saat içinde yatırman gerekiyor.<br>" +
+                $"IBAN Bilgisi: Turkuvaz Müzik Kitap Mağazacılık Pazarlama A.Ş. BNK:DENİZBANK - TR20 0013 4000 0039 7116 0000 07<br>" +
                 $"Ödeme yaptıktan sonra bu mail üzerinden dekontunu paylaşmanı rica ediyoruz.<br>" +
                 $"Toplam Ödenecek Tutar: {price} TL<br>" +
                 $"Siparişinde satın almaya hak kazandığın ürünler;<br>" +
                 $"{b}<br>" +
                 $"Satın almaya hak kazanamadığın ürünler;<br>" +
-                $"{c}" +
-                $"Teşekkürler İyi Alışverişler<br>" +
+                $"{c}<br>" +
+                $"<br>Ödemeniz ulaştığında ürününüzü 8.katta bulunan idefix SSH Ofisi’ne getirteceğiz.<br>" +
+                $"Ekibimiz, ürününüzü teslim etmek için sizi bilgilendirecek ve gerekli kontrolleri sağlayarak ürünü sizlere elden teslim edecektir.<br>" +
+                $"<br>Teşekkürler İyi Alışverişler<br>" +
                 $"SSH"
                 
                 ;
