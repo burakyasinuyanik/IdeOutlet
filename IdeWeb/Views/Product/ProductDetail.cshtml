@@ -22,9 +22,7 @@
                     <div class="row text-center mt-2">
                         <div class="col-sm-6">
                             <div class="d-grid">
-                                <button onclick="addBasket(@Model.Id)" type="button" class="btn btn-primary waves-effect waves-light mt-2 me-1">
-                                    <i class="uil uil-shopping-cart-alt me-2"></i> Sepete Ekle !
-                                </button>
+                              
                             </div>
                         </div>
                         
@@ -36,6 +34,7 @@
     </div>
     <div class="col-xl-7">
         <div class="mt-4 mt-xl-3 ps-xl-4">
+
             <h5 class="font-size-14">@Model.Name.Split(" ")[0]</h5>
             <h4 class="font-size-20 mb-3">@Model.Name</h4>
 
@@ -45,8 +44,14 @@
 
             <h5 class="mt-4 pt-2">@Model.Price TL <span class="text-danger font-size-14 ms-2"></span></h5>
 
-            <p class="mt-4 text-muted">@Model.Description</p>
+            <p class="mt-4 text-muted"><span>Açıklama:</span>@Model.Description</p>
+            <p class="mt-4 text-muted"><span>Ürün Barkodu:</span>@Model.Barcode</p>
+            <p class="mt-4 text-muted"><span>Ürün Numarası:</span>@Model.ProductNo</p>
 
+            <button onclick="addBasket(@Model.Id)" type="button" class="btn btn-primary waves-effect waves-light mt-2 me-1">
+                <i class="uil uil-shopping-cart-alt me-2"></i> Sepete Ekle !
+            </button>
+@*
             <div>
                 <div class="row">
                     <div class="col-md-6">
@@ -73,7 +78,7 @@
                         </div>
                     </div>
                 </div>
-
+*@
         
 
                

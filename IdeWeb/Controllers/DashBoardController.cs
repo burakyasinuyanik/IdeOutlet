@@ -14,14 +14,14 @@ namespace Ide.Web.Controllers
         public DashBoardController(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
-        [Authorize(Roles = "Admin")]
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             return View();
         }
-        [Authorize(Roles = "Admin")]
 
+        [Authorize(Roles = "Admin")]
         public IActionResult TotalOrder()
             {
 
@@ -37,8 +37,8 @@ namespace Ide.Web.Controllers
                   }
                   ));
         }
-        [Authorize(Roles = "Admin")]
 
+        [Authorize(Roles = "Admin")]
         public IActionResult OrderCase()
         {
 
@@ -48,8 +48,8 @@ namespace Ide.Web.Controllers
                 OrderTypeCount = o.Count()
             })) ;
         }
+        
         [Authorize(Roles = "Admin")]
-
         public IActionResult OrderProductCase()
         {
             return Json(unitOfWork.OrderProducts.GetAll().Include(o=>o.OrderProductType).GroupBy(o => o.OrderProductType.Name).Select(o => new
@@ -58,8 +58,8 @@ namespace Ide.Web.Controllers
                 OrderProductTypeCount = o.Count()
             }));
         }
-        [Authorize(Roles = "Admin")]
 
+        [Authorize(Roles = "Admin")]
         public IActionResult ProductCase()
         {
             List<Product> product = unitOfWork.Products.GetAll().ToList();
@@ -73,8 +73,8 @@ namespace Ide.Web.Controllers
             double percentRemainingStock = (remainingStock * 100) / totalStock;
             return Json(new { percentRemainingStock = percentRemainingStock.ToString("0.00").Replace(",",".") });
         }
+       
         [Authorize(Roles = "Admin")]
-
         public IActionResult ConfirmationOrderProductCase()
         {
             
@@ -86,8 +86,8 @@ namespace Ide.Web.Controllers
                 }
                 ));
         }
+       
         [Authorize(Roles = "Admin")]
-
         public IActionResult PendingOrderProductCase()
         {
 
@@ -99,8 +99,8 @@ namespace Ide.Web.Controllers
                  }
                  ));
         }
+       
         [Authorize(Roles = "Admin")]
-
         public IActionResult AnnulmentOrderProductCase()
         {
 
@@ -112,8 +112,8 @@ namespace Ide.Web.Controllers
                  }
                  ));
         }
+      
         [Authorize(Roles = "Admin")]
-
         public IActionResult TotalCustomer()
         {
 

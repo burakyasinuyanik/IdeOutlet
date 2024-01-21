@@ -70,7 +70,7 @@ namespace Ide.Business.Concrete
 
         public IQueryable GetAllFull()
         {
-          return  unitOfWork.Orders.GetAll().Include(u => u.AppUser).Include(u => u.OrderProducts);
+          return  unitOfWork.Orders.GetAll().Include(u => u.AppUser).Include(u => u.OrderProducts).Include(o=>o.OrderType);
         }
 
         public Order GetOrderDetail(int orderId)
