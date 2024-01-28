@@ -138,6 +138,16 @@
                             }
 
                             
+                        },
+                        error:function(res){
+                            Swal.fire({
+                                title: " Sipariş Oluşmadı",
+                                text: res.responseText,
+                                icon: "error",
+                                confirmButtonText: "Tamam"
+
+                            });
+
                         }
 
                     });

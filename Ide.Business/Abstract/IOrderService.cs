@@ -10,7 +10,7 @@ namespace Ide.Business.Abstract
     public interface IOrderService
     {
         List<Order> GetAll(int id,int pageId);
-        public Order NewOrder(string mail);
+        Task NewOrder(string mail);
         IQueryable GetAllFull();
         public Order GetOrderDetail(int orderId);
         public Order GetOrderPage(int orderId);
@@ -18,5 +18,6 @@ namespace Ide.Business.Abstract
         public double ConsentOrderProductPrice(int orderId);
         public double AnnulmentOrderProductPrice(int orderId);
         public bool MailMessage(int orderId);
+        public int LastOrderId(string mail);
     }
 }

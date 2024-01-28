@@ -239,8 +239,11 @@
                             success: function (res) {
                                 $("#modalAddUpdate").modal('hide');
 
-                                toastr.success(res.message);
-                                $('#tblProduct').DataTable().ajax.reload();
+                                if(res.result){
+                                    toastr.success(res.message);
+                                    $('#tblProduct').DataTable().ajax.reload();
+                                }
+                            
 
                             },
                             error: function (res) {

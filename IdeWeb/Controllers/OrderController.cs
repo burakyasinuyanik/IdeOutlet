@@ -41,19 +41,29 @@ namespace Ide.Web.Controllers
 
 
         [HttpPost]
-        public IActionResult NewOrder(string mail)
+        public async Task <IActionResult> NewOrder(string mail)
         {
-           if(shopingBasketService.BasketNull(mail))
+
+            try
             {
-                int ıd = orderService.NewOrder(mail).Id;
-                string message = "Sipariş Numarınız : " + ıd;
-                return Ok(new { result = true, message = message });
-            }
-            else
+                if (shopingBasketService.BasketNull(mail))
+                {
+                    await orderService.NewOrder(mail);
+                    string message = "Sipariş Numarınız : " +orderService.LastOrderId(mail);
+                    return Ok(new { result = true, message = message });
+                }
+                else
+                {
+                    return Ok(new { result = false, message = "Sipariş oluşmadı.Sepeteinizde ürün bulunmamaktadır." });
+                }
+            }catch(Exception ex)
             {
-                return Ok(new {result=false,message="sipariş oluşmadı"});
+                return BadRequest(new { result = false, message = "Sipariş Oluşturulurken Hata Oluştu. Tekrar Deneyiniz. " + ex.Message });
+
+
             }
-           
+
+
 
         }
         [HttpPost]

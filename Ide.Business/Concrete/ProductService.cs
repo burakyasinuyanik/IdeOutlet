@@ -97,7 +97,21 @@ namespace Ide.Business.Concrete
                                 product.Price = double.Parse(currentWorksheet.Cells[i, 11].Value.ToString());
                                 product.Picture = currentWorksheet.Cells[i, 2].Text.ToString() + ".png";
                                 product.IsActive = true;
-                                newProducts.Add(product);
+                                bool addCase = true;
+                                foreach(Product item in newProducts)
+                                {
+                                    if (item.ProductNo == product.ProductNo)
+                                    {
+                                        addCase = false;
+                                        item.Stock += product.Stock;
+                                        item.RemainingStock += product.RemainingStock;
+                                    }
+                                }
+                                if (addCase)
+                                {
+                                    newProducts.Add(product);
+
+                                }
 
                             }
 

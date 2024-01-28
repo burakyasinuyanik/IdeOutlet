@@ -24,7 +24,8 @@ namespace Ide.Web.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult TotalOrder()
             {
-
+          
+           
 
             return Json(unitOfWork.Orders.GetAll().OrderBy(o => o.DateCraeted).GroupBy(
                    o => new { o.DateCraeted.Year, o.DateCraeted.Month, o.DateCraeted.Day }).Select(o =>

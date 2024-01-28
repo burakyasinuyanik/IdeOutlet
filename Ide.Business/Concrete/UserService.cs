@@ -36,6 +36,8 @@ namespace Ide.Business.Concrete
             unitOfWork.Users.Add(appUser);
             unitOfWork.Save();
 
+
+
             return appUser;
         }
 

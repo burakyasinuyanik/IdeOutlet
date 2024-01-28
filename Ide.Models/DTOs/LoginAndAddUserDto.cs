@@ -14,5 +14,6 @@ namespace Ide.Models.DTOs
         public string Gsm { get; set; }
         public int UserTypeId { get; set; } 
         public bool IsPersistent { get; set; } = false;
+        public string AddPas { get; set; }
     }
 }

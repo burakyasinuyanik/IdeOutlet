@@ -91,12 +91,18 @@
         }
         function pageSelect(a){
             event.preventDefault();
+            goToByScroll();
             $(".active").removeClass("active");
             $("#list-" + a).addClass("active");
+            goToByScroll();
 
 
             fillProduct(a);
 
+        }
+
+       function goToByScroll() {
+            $('html,body').animate({ scrollTop: $("#layout-wrapper").offset().top }, 'fast');
         }
 
         function addBasket(id){

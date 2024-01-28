@@ -81,6 +81,11 @@ namespace Ide.Web.Controllers
         {
             try
             {
+                if (loginAndAddUser.AddPas != "idefixOutletSSH")
+                {
+                    return Ok(new { result = false, message = "Kayıt Kabul Şifresi Yanlış!" });
+
+                }
 
                 if (userService.UserContains(loginAndAddUser.Email))
                 {

@@ -83,12 +83,11 @@ namespace Ide.Business.Concrete
            return unitOfWork.Orders.GetAll(u => u.Id == orderId).Include(u => u.AppUser).Include(u => u.OrderProducts).FirstOrDefault();
         }
 
-        public Order NewOrder(string mail)
+        public async Task NewOrder(string mail)
         {
           ShoppingBasket basket=  unitOfWork.ShoppingBaskets.GetAll().Include(u => u.AppUsers).Include(u => u.Products).Where(u=>u.AppUsers.Any(u=>u.Email==mail)).FirstOrDefault();
 
-            if (basket.Products.Count > 0)
-            {
+            
                 Order order = new Order();
                 order.OrderTypeId = unitOfWork.OrderTypes.GetFirstOrDefault(u => u.Name.Contains("bek")).Id;
                 List<OrderProduct> orderProductsList = new List<OrderProduct>();
@@ -116,12 +115,9 @@ namespace Ide.Business.Concrete
             
                 unitOfWork.Orders.Add(order);
                 unitOfWork.Save();
-                return order;
-            }
-            else
-            {
-                return null;
-            }
+             
+            
+            
             
         }
 
@@ -165,6 +161,11 @@ namespace Ide.Business.Concrete
            bool mailBool= SendMail.mailSend(mail, subject, a);
 
             return mailBool;
+        }
+
+        public int LastOrderId(string mail)
+        {
+           return unitOfWork.Orders.GetAll(o => o.AppUser.Email == mail).OrderByDescending(o => o.Id).FirstOrDefault().Id;
         }
     }
 }

@@ -44,7 +44,13 @@
                             <div class="mb-3 row">
                                 <label for="inputName" class="col-4 col-form-label">İsim</label>
                                 <div class="col-8">
-                                    <input type="text" class="form-control input-mask" parsley-type="email" required id="txtName" placeholder="İsminizi Giriniz">
+                                    <input type="text" class="form-control input-mask" parsley-type="text" required id="txtName" placeholder="İsminizi Giriniz">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="inputMail" class="col-4 col-form-label">Email</label>
+                                <div class="col-8">
+                                    <input type="email" class="form-control input-mask" parsley-type="email" required id="txtEmail" placeholder="Sisteme giriş için kullanılacaktır">
                                 </div>
                             </div>
 
@@ -62,9 +68,9 @@
                             </div>
 
                             <div class="mb-3 row">
-                                <label for="inputMail" class="col-4 col-form-label">Email</label>
+                                <label for="inputMail" class="col-4 col-form-label">Kayıt Kabul Şifresi</label>
                                 <div class="col-8">
-                                    <input type="email" class="form-control input-mask" parsley-type="email" required id="txtEmail" placeholder="Sisteme giriş için kullanılacaktır">
+                                    <input type="text" class="form-control input-mask" parsley-type="text" required id="txtAddPas" placeholder="Sisteme kayıt için gereklidir.">
                                 </div>
                             </div>
 
@@ -82,7 +88,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-target="#newUserModal">Kapat</button>
-                        <button type="submit" id="btnSave" class="btn btn-primary">Ekle</button>
+                        <button type="submit" id="btnSave" class="btn btn-primary">Kayıt Ol</button>
                     </div>
                 </form>
             </div>
@@ -234,7 +240,8 @@
                         formData.append("email", $("#txtEmail").val());
                         formData.append("gsm", $("#txtGsm").val());
                         formData.append("password", $("#txtPass").val());
-                       
+                        formData.append("addPas", $("#txtAddPas").val());
+
 
 
 
